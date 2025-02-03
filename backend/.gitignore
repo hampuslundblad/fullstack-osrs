@@ -26,5 +26,7 @@ obj/
 .fake
 
 #db
-./DotestComp/test.db
-./DotnetComp/appsettings.Development.json
+/DotnetComp/test.db
+
+# settings
+/DotnetComp/appsettings.Development.json
