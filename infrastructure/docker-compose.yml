@@ -1,0 +1,22 @@
+version: "3"
+services:
+  nginx:
+    depends_on:
+      - backend
+      - frontend
+    restarts: always
+    build:
+      dockerfile: ./Dockerfile
+      context: ./nginx
+    ports:
+      - "5173:80"
+  backend:
+    image: hampuslundblad1/comp:backend
+    ports:
+      - "5000:5000"
+    environment:
+
+  frontend:
+    image: hampuslundblad1/comp:frontend
+    ports:
+      - "3000:3000"
