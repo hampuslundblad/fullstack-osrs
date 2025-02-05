@@ -20,12 +20,11 @@ echo "github__ClientSecret=$ClientSecret" >> fullstack-osrs/secrets.env
 nginx_conf_url="https://raw.githubusercontent.com/hampuslundblad/fullstack-osrs/refs/heads/main/infrastructure/nginx/default.conf"
 dockerfile_url="https://raw.githubusercontent.com/hampuslundblad/fullstack-osrs/refs/heads/main/infrastructure/Dockerfile"
 docker_compose_url="https://raw.githubusercontent.com/hampuslundblad/fullstack-osrs/refs/heads/main/infrastructure/docker-compose-prod.yml"
-db_url="https://raw.githubusercontent.com/hampuslundblad/fullstack-osrs/refs/heads/main/backend/DotnetComp/test.db"
 
 # Destination paths
 nginx_conf_dest="fullstack-osrs/nginx/default.conf"
 dockerfile_dest="fullstack-osrs/Dockerfile"
-docker_compose_dest="fullstack-osrs/docker-compose.yml"
+docker_compose_dest="fullstack-osrs/docker-compose-prod.yml"
 
 # Function to download a file with error handling
 download_file() {
