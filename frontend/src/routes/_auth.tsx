@@ -15,12 +15,15 @@ export const Route = createFileRoute("/_auth")({
       if (error instanceof AxiosError) {
         if (error.status === 401) {
           authGithub();
+          throw redirect({
+            to: "/login",
+            search: {
+              redirect: location.pathname,
+            },
+          });
         }
         throw redirect({
-          to: "/login",
-          search: {
-            redirect: location.pathname,
-          },
+          to: "/",
         });
       }
       throw new Error("An error occurred");

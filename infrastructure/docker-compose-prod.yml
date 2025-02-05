@@ -6,11 +6,15 @@ services:
     restart: always
     build: .
     ports:
+      - "443:443"
       - "80:80"
+    volumes:
+      - ./:/home/hampus/fullstack-osrs
+      - /etc/letsencrypt/ssl/fullchain.pem:/etc/nginx/ssl/fullchain.pem
+      - /etc/letsencrypt/ssl/privkey.pem:/etc/nginx/ssl/privkey.pem
 
   backend:
-    # image: hampuslundblad1/comp_backend:1
-    build: ../backend/DotnetComp
+    image: hampuslundblad1/comp_backend:latest
     ports:
       - "5000:5000"
     volumes:
@@ -19,9 +23,7 @@ services:
       - ASPNETCORE_HTTP_PORTS=5000
     env_file:
       - secrets.env
-
   frontend:
-    #  image: hampuslundblad1/comp_frontend:1
-    build: ../frontend
+    image: hampuslundblad1/comp_frontend:latest
     ports:
       - "3000:3000"

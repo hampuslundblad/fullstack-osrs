@@ -8,8 +8,10 @@ RUN dotnet restore "DotnetComp.csproj"
 
 COPY . .    
 RUN dotnet publish -c Release -o /app
-VOLUME /app/test.db
+
+#VOLUME /app/test.db
 #runtime
+
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 EXPOSE 5000
 WORKDIR /app

@@ -10,6 +10,7 @@ export const Route = createLazyFileRoute("/")({
 
 function RouteComponent() {
   const [isLoading, setIsLoading] = useState(false);
+  console.log(import.meta.env);
 
   return (
     <Layout title="Home">

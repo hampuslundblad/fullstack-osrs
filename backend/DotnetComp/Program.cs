@@ -62,14 +62,25 @@ builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+
+
 // Setup database
 var connectionString =
     builder.Configuration.GetConnectionString("sqlite")
     ?? throw new InvalidOperationException("Connection string for database not found.");
+
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlite(connectionString));
 
 //Auth
-var githubConfig = builder.Configuration.GetSection("Github");
+
+
+// if(builder.Environment.IsProduction()) {
+//     var githubConfig = builder.Environment.EnvironmentName    
+// } else {
+//     var githubConfig = builder.Configuration.GetSection("GithubDev");
+// }
+
+var githubConfig = builder.Configuration.GetSection("Github") ?? throw new InvalidOperationException("Github config not found");
 
 // Need to set CookieAuthenticationDefaults here otherwise stack overflow see: https://github.com/dotnet/aspnetcore/issues/42975
 builder
@@ -128,17 +139,22 @@ builder
 
 var app = builder.Build();
 
+
+app.UsePathBase("/.api");
+
+app.Logger.LogInformation("Running in development: {IsDevelopment}", app.Environment.IsDevelopment());
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseHttpsRedirection();
 }
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseHttpsRedirection();
+
 
 app.MapControllers();
 

@@ -34,8 +34,20 @@ namespace DotnetComp.Controllers.v1
 
             var userAuthId = userIdClaim!.Value;
 
-            var user = await userService.FindOrCreateUserAsync(userAuthId);
-            return Ok(user.Value);
+            var result = await userService.FindOrCreateUserAsync(userAuthId);
+            return result.Match(
+                onSuccess: () => Ok(result.Value),
+                onFailure: (error) =>
+                {
+                    return error.ErrorType switch
+                    {
+                        ErrorType.NotFound => BadRequest("User not found"),
+                        ErrorType.Failure => StatusCode(500, "Internal server error"),
+                        _ => StatusCode(500, "unkown error"),
+                    };
+                }
+            );
+            
         }
 
         [Authorize]

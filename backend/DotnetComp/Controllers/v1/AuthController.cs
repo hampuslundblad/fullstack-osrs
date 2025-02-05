@@ -6,8 +6,10 @@ namespace DotnetComp.Controllers.v1
 {
     [ApiController]
     [Route("auth")]
-    public class AuthController : ControllerBase
+    public class AuthController(ILogger<AuthController> logger) : ControllerBase
     {
+        private readonly ILogger<AuthController> logger = logger;
+
         [HttpGet("")]
         public ActionResult Root()
         {
@@ -17,6 +19,7 @@ namespace DotnetComp.Controllers.v1
         [HttpGet("github")]
         public ActionResult Login([FromQuery] string returnUrl)
         {
+            logger.LogInformation("Challenge with RedirectUri to {returnUrl}", returnUrl);
             return Challenge(
                 new AuthenticationProperties() { RedirectUri = returnUrl },
                 authenticationSchemes: ["github"]
