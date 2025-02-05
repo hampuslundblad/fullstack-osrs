@@ -15,7 +15,7 @@ sudo apt update || error_exit "Failed to update package lists"
 sudo apt install -y certbot || error_exit "Failed to install certbot"
 
 # Obtain the SSL certificate
-sudo certbot certonly --webroot --webroot-path /home/hampus/fullstack-osrs -d hampuslundblad.com --agree-tos -m hampus.lundblad@hotmail.se -non-interactive|| error_exit "Failed to obtain SSL certificate"
+sudo certbot certonly --webroot --webroot-path /home/hampus/fullstack-osrs -d hampuslundblad.com --agree-tos -m hampus.lundblad@hotmail.se --non-interactive --redirect || error_exit "Failed to obtain SSL certificate"
 
 # Create the directory for SSL certificates
 sudo mkdir -p /etc/letsencrypt/ssl || error_exit "Failed to create /etc/letsencrypt/ssl directory"
