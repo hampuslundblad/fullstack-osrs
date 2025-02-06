@@ -1,20 +1,22 @@
-# build
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-
+# build platform is needed to build to amd64
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG TARGETARCH
 WORKDIR /src
 
-COPY ["DotnetComp.csproj", "./"]
-RUN dotnet restore "DotnetComp.csproj"
+COPY ["DotnetComp.csproj", "."]
+
+RUN dotnet restore --arch $TARGETARCH
 
 COPY . .    
-RUN dotnet publish -c Release -o /app
+RUN dotnet publish -c Release -o /app -a $TARGETARCH
 
 #VOLUME /app/test.db
 #runtime
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
-EXPOSE 5000
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 as runtime
+
 WORKDIR /app
 COPY --from=build /app .
 
+EXPOSE 5000
 ENTRYPOINT ["dotnet", "DotnetComp.dll"]
