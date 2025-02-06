@@ -1,5 +1,17 @@
 #!/bin/bash
 
+# Constants
+DOMAIN="hampuslundblad.com"
+CERTBOT_DIR="/etc/certbot"
+CREDENTIALS_FILE="$CERTBOT_DIR/credentials"
+
+# Check if the script is run as root
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run as root"
+  exit 1
+fi
+
+# Check if the correct arguments are provided
 if [ "$1" != "-token" ] || [ -z "$2" ]; then
   echo "Usage: $0 -token <api_token>"
   exit 1
@@ -7,38 +19,11 @@ fi
 
 API_TOKEN=$2
 
-# Update package list and install required packages
-if ! apt update && apt install -y certbot python3-certbot-dns-cloudflare; then
-  echo "Error: Failed to install required packages."
-  exit 1
-fi
 
-# Create the directory and set permissions
-if ! mkdir -p /etc/cloudflare; then
-  echo "Error: Failed to create /etc/cloudflare directory."
-  exit 1
-fi
+apt update && apt install -y certbot python3-certbot-dns-cloudflare
+mkdir -p $CERTBOT_DIR
+touch $CREDENTIALS_FILE
+echo "dns_cloudflare_api_token = \"$API_TOKEN\"" > $CREDENTIALS_FILE
+chmod 600 $CREDENTIALS_FILE
 
-if ! chmod 700 /etc/cloudflare; then
-  echo "Error: Failed to set permissions for /etc/cloudflare directory."
-  exit 1
-fi
-
-# Create the file and set permissions
-if ! touch /etc/cloudflare/hampuslundblad.com.ini; then
-  echo "Error: Failed to create /etc/cloudflare/hampuslundblad.com.ini file."
-  exit 1
-fi
-
-if ! chmod 600 /etc/cloudflare/hampuslundblad.com.ini; then
-  echo "Error: Failed to set permissions for /etc/cloudflare/hampuslundblad.com.ini file."
-  exit 1
-fi
-
-# Write the API token to the file
-if ! echo "dns_cloudflare_api_token = \"$API_TOKEN\"" > /etc/cloudflare/hampuslundblad.com.ini; then
-  echo "Error: Failed to write to /etc/cloudflare/hampuslundblad.com.ini file."
-  exit 1
-fi
-
-echo "API token successfully written to /etc/cloudflare/hampuslundblad.com.ini"
+echo "DNS Cloudflare credentials set up successfully at $CREDENTIALS_FILE"
