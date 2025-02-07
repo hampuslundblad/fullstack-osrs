@@ -18,7 +18,7 @@ on:
   workflow_dispatch:
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: backend_comp:latest
+  IMAGE_NAME: hampuslundblad/backend_comp:latest
 
 jobs:
   push_to_registries:
