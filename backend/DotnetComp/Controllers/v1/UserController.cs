@@ -31,7 +31,7 @@ namespace DotnetComp.Controllers.v1
         public async Task<ActionResult> GetOrCreateUser()
         {
             var userIdClaim = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "sub");
-
+            
             var userAuthId = userIdClaim!.Value;
 
             var result = await userService.FindOrCreateUserAsync(userAuthId);
