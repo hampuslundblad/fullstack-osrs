@@ -14,6 +14,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
+import { Route as ErrorImport } from './routes/error'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AuthMygroupsIndexImport } from './routes/_auth.mygroups.index'
 import { Route as AuthMygroupsGroupNameImport } from './routes/_auth.mygroups.$groupName'
@@ -34,6 +35,12 @@ const HiscoreLazyRoute = HiscoreLazyImport.update({
 const LoginRoute = LoginImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ErrorRoute = ErrorImport.update({
+  id: '/error',
+  path: '/error',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -76,6 +83,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AuthImport
+      parentRoute: typeof rootRoute
+    }
+    '/error': {
+      id: '/error'
+      path: '/error'
+      fullPath: '/error'
+      preLoaderRoute: typeof ErrorImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -126,6 +140,7 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '': typeof AuthRouteWithChildren
+  '/error': typeof ErrorRoute
   '/login': typeof LoginRoute
   '/hiscore': typeof HiscoreLazyRoute
   '/mygroups/$groupName': typeof AuthMygroupsGroupNameRoute
@@ -135,6 +150,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '': typeof AuthRouteWithChildren
+  '/error': typeof ErrorRoute
   '/login': typeof LoginRoute
   '/hiscore': typeof HiscoreLazyRoute
   '/mygroups/$groupName': typeof AuthMygroupsGroupNameRoute
@@ -145,6 +161,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
   '/_auth': typeof AuthRouteWithChildren
+  '/error': typeof ErrorRoute
   '/login': typeof LoginRoute
   '/hiscore': typeof HiscoreLazyRoute
   '/_auth/mygroups/$groupName': typeof AuthMygroupsGroupNameRoute
@@ -156,16 +173,25 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | ''
+    | '/error'
     | '/login'
     | '/hiscore'
     | '/mygroups/$groupName'
     | '/mygroups'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/login' | '/hiscore' | '/mygroups/$groupName' | '/mygroups'
+  to:
+    | '/'
+    | ''
+    | '/error'
+    | '/login'
+    | '/hiscore'
+    | '/mygroups/$groupName'
+    | '/mygroups'
   id:
     | '__root__'
     | '/'
     | '/_auth'
+    | '/error'
     | '/login'
     | '/hiscore'
     | '/_auth/mygroups/$groupName'
@@ -176,6 +202,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   AuthRoute: typeof AuthRouteWithChildren
+  ErrorRoute: typeof ErrorRoute
   LoginRoute: typeof LoginRoute
   HiscoreLazyRoute: typeof HiscoreLazyRoute
 }
@@ -183,6 +210,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   AuthRoute: AuthRouteWithChildren,
+  ErrorRoute: ErrorRoute,
   LoginRoute: LoginRoute,
   HiscoreLazyRoute: HiscoreLazyRoute,
 }
@@ -199,6 +227,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/_auth",
+        "/error",
         "/login",
         "/hiscore"
       ]
@@ -212,6 +241,9 @@ export const routeTree = rootRoute
         "/_auth/mygroups/$groupName",
         "/_auth/mygroups/"
       ]
+    },
+    "/error": {
+      "filePath": "error.tsx"
     },
     "/login": {
       "filePath": "login.tsx"

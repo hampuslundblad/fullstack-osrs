@@ -1,4 +1,3 @@
-import { authGithub } from "@/api/auth";
 import { fetchUser } from "@/api/user";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { AxiosError } from "axios";
@@ -14,7 +13,6 @@ export const Route = createFileRoute("/_auth")({
       console.error(error);
       if (error instanceof AxiosError) {
         if (error.status === 401) {
-          authGithub();
           throw redirect({
             to: "/login",
             search: {
@@ -22,8 +20,9 @@ export const Route = createFileRoute("/_auth")({
             },
           });
         }
+        // Error other than 401
         throw redirect({
-          to: "/",
+          to: "/error",
         });
       }
       throw new Error("An error occurred");

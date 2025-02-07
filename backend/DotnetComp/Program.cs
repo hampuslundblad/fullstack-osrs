@@ -71,15 +71,6 @@ var connectionString =
 
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlite(connectionString));
 
-//Auth
-
-
-// if(builder.Environment.IsProduction()) {
-//     var githubConfig = builder.Environment.EnvironmentName    
-// } else {
-//     var githubConfig = builder.Configuration.GetSection("GithubDev");
-// }
-
 var githubConfig = builder.Configuration.GetSection("Github") ?? throw new InvalidOperationException("Github config not found");
 
 // Need to set CookieAuthenticationDefaults here otherwise stack overflow see: https://github.com/dotnet/aspnetcore/issues/42975
@@ -89,8 +80,13 @@ builder
         CookieAuthenticationDefaults.AuthenticationScheme,
         options =>
         {
-            options.LoginPath = "/auth/login";
+            options.Events.OnRedirectToLogin = context =>
+            {
+            context.Response.StatusCode = 401;
+            return Task.CompletedTask;
+            };
         }
+       
     )
     .AddOAuth(
         "github",
