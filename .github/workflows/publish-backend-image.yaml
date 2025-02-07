@@ -18,7 +18,7 @@ on:
   workflow_dispatch:
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: hampuslundblad1/backend_comp
+  IMAGE_NAME: backend_comp:latest
 
 jobs:
   push_to_registries:
@@ -55,7 +55,7 @@ jobs:
           context: ./backend/DotnetComp
           push: true
           tags: ${{ steps.meta.outputs.tags }}
-          # labels: ${{ steps.meta.outputs.labels }}
+          labels: ${{ steps.meta.outputs.labels }}
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v2
