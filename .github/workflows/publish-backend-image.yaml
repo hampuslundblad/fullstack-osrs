@@ -24,8 +24,8 @@ jobs:
       registry: ghcr.io
       image_name: hampuslundblad/backend_comp
       context: ./backend/DotnetComp
-  permissions: # Needs same permissions as the reusable-publish-image.yaml, might be a better way to do this
-    packages: write
-    contents: read
-    attestations: write
-    id-token: write
+    permissions: # Needs same permissions as the reusable-publish-image.yaml, might be a better way to do this
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
