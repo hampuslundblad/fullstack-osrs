@@ -14,7 +14,7 @@ services:
       - /etc/letsencrypt/live/hampuslundblad.com/privkey.pem:/etc/nginx/ssl/privkey.pem
 
   backend:
-    image: ghcr.iohampuslundblad/backend_comp:main
+    image: ghcr.io/hampuslundblad/backend_comp:main
     ports:
       - "5000:5000"
     volumes:
@@ -24,6 +24,6 @@ services:
     env_file:
       - secrets.env
   frontend:
-    image: hampuslundblad1/comp_frontend:latest
+    image: ghcr.io/hampuslundblad/frontend_comp:main
     ports:
       - "3000:3000"
