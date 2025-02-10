@@ -10,8 +10,8 @@ services:
       - "80:80"
     volumes:
       - ./:/home/hampus/fullstack-osrs
-      - /etc/letsencrypt/ssl/fullchain.pem:/etc/nginx/ssl/fullchain.pem
-      - /etc/letsencrypt/ssl/privkey.pem:/etc/nginx/ssl/privkey.pem
+      - /etc/letsencrypt/live/hampuslundblad.com/fullchain.pem:/etc/nginx/ssl/fullchain.pem
+      - /etc/letsencrypt/live/hampuslundblad.com/privkey.pem:/etc/nginx/ssl/privkey.pem
 
   backend:
     image: hampuslundblad1/comp_backend:latest

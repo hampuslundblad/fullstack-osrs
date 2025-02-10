@@ -27,3 +27,6 @@ echo "dns_cloudflare_api_token = \"$API_TOKEN\"" > $CREDENTIALS_FILE
 chmod 600 $CREDENTIALS_FILE
 
 echo "DNS Cloudflare credentials set up successfully at $CREDENTIALS_FILE"
+
+
+sudo certbot certonly --dns-cloudflare   --dns-cloudflare-credentials /etc/certbot/credentials   -d hampuslundblad.co m

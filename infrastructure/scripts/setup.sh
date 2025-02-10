@@ -8,8 +8,10 @@ ClientSecret="123"
 # Create the main directory
 mkdir -p fullstack-osrs/nginx
 
-# Create the secrets.env file
-touch fullstack-osrs/secrets.env
+# Create the secrets.env file if it doesn't exist
+if [ ! -f fullstack-osrs/secrets.env ]; then
+    touch fullstack-osrs/secrets.env
+fi
 
 # Write the variables to secrets.env
 echo "github__ClientId=$ClientId" > fullstack-osrs/secrets.env
