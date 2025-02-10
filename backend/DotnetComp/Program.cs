@@ -9,6 +9,7 @@ using DotnetComp.Repositories;
 using DotnetComp.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -109,7 +110,7 @@ builder
             options.UserInformationEndpoint = "https://api.github.com/user";
 
             // The callback path is defined with .api in github, however nginx removes the .api
-            options.CallbackPath = "/.api/oauth/github-cb";
+            options.CallbackPath = "/oauth/github-cb";
 
             options.SaveTokens = true;
 
@@ -141,6 +142,16 @@ var app = builder.Build();
 
 app.Logger.LogInformation("Running in development: {IsDevelopment}", app.Environment.IsDevelopment());
 // Configure the HTTP request pipeline.
+
+
+// Try and fix http redirect_uri instead of https in the github oauth flow. 
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedProto
+        });
+
+
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
