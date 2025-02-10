@@ -18,9 +18,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  call_reusable_workflow:
+  publish_image:
     uses: ./.github/workflows/reusable-publish-image.yaml
     with:
       registry: ghcr.io
       image_name: hampuslundblad/backend_comp
       context: ./backend/DotnetComp
+  permissions: # Needs same permissions as the reusable-publish-image.yaml, might be a better way to do this
+    packages: write
+    contents: read
+    attestations: write
+    id-token: write
