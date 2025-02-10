@@ -1,11 +1,11 @@
-name: Backend - Build & push container to GHCR
+name: Frontend - Build & push container to GHCR
 
 on:
   push:
     branches: main
     paths:
-      - "backend/DotnetComp/**"
-      - ".github/workflows/publish-backend-image.yaml"
+      - "frontend/**"
+      - ".github/workflows/publish-frontend-image.yaml"
   workflow_dispatch:
 
 jobs:
@@ -13,8 +13,8 @@ jobs:
     uses: ./.github/workflows/reusable-publish-image.yaml
     with:
       registry: ghcr.io
-      image_name: hampuslundblad/backend_comp
-      context: ./backend/DotnetComp
+      image_name: hampuslundblad/frontend_comp
+      context: ./frontend
     permissions: # Needs same permissions as the reusable-publish-image.yaml, might be a better way to do this
       packages: write
       contents: read
