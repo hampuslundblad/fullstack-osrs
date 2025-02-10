@@ -108,7 +108,8 @@ builder
 
             options.UserInformationEndpoint = "https://api.github.com/user";
 
-            options.CallbackPath = "/oauth/github-cb";
+            // The callback path is defined with .api in github, however nginx removes the .api
+            options.CallbackPath = "/.api/oauth/github-cb";
 
             options.SaveTokens = true;
 
@@ -135,8 +136,8 @@ builder
 
 var app = builder.Build();
 
-
-app.UsePathBase("/.api");
+// Why did I need this in the first place?
+// app.UsePathBase("/.api");
 
 app.Logger.LogInformation("Running in development: {IsDevelopment}", app.Environment.IsDevelopment());
 // Configure the HTTP request pipeline.
