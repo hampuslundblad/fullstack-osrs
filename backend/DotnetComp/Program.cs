@@ -110,7 +110,7 @@ builder
             options.UserInformationEndpoint = "https://api.github.com/user";
 
             // The callback path is defined with .api in github, however nginx removes the .api
-            options.CallbackPath = "/oauth/github-cb";
+            options.CallbackPath = "/.api/oauth/github-cb";
 
             options.SaveTokens = true;
 
