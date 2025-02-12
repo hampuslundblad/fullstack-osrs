@@ -26,4 +26,5 @@ WORKDIR /app
 COPY --from=build /app .
 
 EXPOSE 5000
-ENTRYPOINT ["dotnet", "DotnetComp.dll"]
+ENTRYPOINT ["sh", "-c", "dotnet ef database update --verbose && dotnet DotnetComp.dll"]
+#ENTRYPOINT ["dotnet", "DotnetComp.dll"]
