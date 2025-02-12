@@ -1,0 +1,20 @@
+# build platform is needed to build to amd64
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG TARGETARCH
+WORKDIR /app
+
+COPY ["DotnetComp.csproj", "."]
+
+RUN dotnet restore --arch $TARGETARCH
+
+COPY . .    
+
+# SO that we can use dotnet ef
+RUN dotnet tool install -g dotnet-ef 
+
+ENV PATH="${PATH}:/root/.dotnet/tools/"
+
+#Verify that dotnet-ef is installed
+RUN dotnet-ef --versions
+
+ENTRYPOINT ["sh", "-c", "dotnet-ef database update --verbose --connection 'Data Source=/app/test.db'"]

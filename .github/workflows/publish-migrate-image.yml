@@ -1,0 +1,22 @@
+name: Migration image - Build & push container to GHCR
+
+on:
+  push:
+    branches: main
+    paths:
+      - "backend/DotnetComp/**"
+      - ".github/workflows/publish-migrate-image.yaml"
+  workflow_dispatch:
+
+jobs:
+  publish_image:
+    uses: ./.github/workflows/reusable-publish-image.yaml
+    with:
+      registry: ghcr.io
+      image_name: hampuslundblad/migrations
+      context: ./backend/DotnetComp/dockerfile.migrate
+    permissions: # Needs same permissions as the reusable-publish-image.yaml, might be a better way to do this
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write

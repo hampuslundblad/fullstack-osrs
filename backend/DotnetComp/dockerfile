@@ -1,6 +1,7 @@
 # build platform is needed to build to amd64
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG TARGETARCH
+
 WORKDIR /src
 
 COPY ["DotnetComp.csproj", "."]
@@ -11,26 +12,12 @@ COPY . .
 
 RUN dotnet publish -c Release -o /app -a $TARGETARCH
 
-#HVOLUME /app/test.db
-#runtime
-
-
-RUN dotnet tool install -g dotnet-ef 
-
-#RUN dotnet ef --version
-
-#RUN dotnet ef database update --verbose
-
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 
-# SO that we can use dotnet ef
-ENV PATH="${PATH}:/root/.dotnet/tools"
-
 WORKDIR /app
-COPY --from=build /app .
-COPY --from=build /root/.dotnet /root/.dotnet
 
+COPY --from=build /app .
 
 EXPOSE 5000
-ENTRYPOINT ["sh", "-c", "dotnet ef database update --verbose && dotnet DotnetComp.dll"]
-#ENTRYPOINT ["dotnet", "DotnetComp.dll"]
+
+ENTRYPOINT ["dotnet", "DotnetComp.dll"]

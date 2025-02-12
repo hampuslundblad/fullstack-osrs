@@ -14,15 +14,15 @@ dotnet run
 
 ### Docker
 
-Build 
+Build
 
 ```bash
 docker build . -t <container name>
 ```
 
-Run 
+Run
 
-```bash 
+```bash
 docker run -it -p <your port>:8080 <container name>
 ```
 
@@ -37,7 +37,6 @@ If there's any issues with the C# dev kit languager server then add this in `.vs
 
 ```
 
-
 ### Notes
 
 Initial db setup
@@ -48,5 +47,3 @@ dotnet add package Microsoft.EntityFrameworkCore.Design
 dotnet ef migrations add InitialCreate
 dotnet ef database update
 ```
-
-
