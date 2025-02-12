@@ -7,5 +7,6 @@
 # files
 Dockerfile*
 **/*.md
+*.db
 
 appsettings.Development.json

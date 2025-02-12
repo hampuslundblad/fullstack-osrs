@@ -10,7 +10,7 @@ RUN dotnet restore --arch $TARGETARCH
 COPY . .    
 RUN dotnet publish -c Release -o /app -a $TARGETARCH
 
-#VOLUME /app/test.db
+VOLUME /app/db/test.db
 #runtime
 
 RUN dotnet tool install -g dotnet-ef
