@@ -9,12 +9,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  publish_image:
+  publish_migrate_image:
     uses: ./.github/workflows/reusable-publish-image.yaml
     with:
       registry: ghcr.io
       image_name: hampuslundblad/migrations
-      file: ./backend/DotnetComp/dockerfile.migrate
+      context: ./backend/DotnetComp/dockerfile.migrate
     permissions: # Needs same permissions as the reusable-publish-image.yaml, might be a better way to do this
       packages: write
       contents: read
