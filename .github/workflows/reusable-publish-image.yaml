@@ -13,6 +13,9 @@ on:
       context: # Path to the Dockerfile
         required: true
         type: string
+      file: # If need to specify a different Dockerfile
+        required: false
+        type: string
 
 jobs:
   push_to_registries:
@@ -47,6 +50,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ${{ inputs.context }}
+          file: ${{ inputs.file }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
