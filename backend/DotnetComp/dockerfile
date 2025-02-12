@@ -8,6 +8,7 @@ COPY ["DotnetComp.csproj", "."]
 RUN dotnet restore --arch $TARGETARCH
 
 COPY . .    
+
 RUN dotnet publish -c Release -o /app -a $TARGETARCH
 
 VOLUME /app/db/test.db
