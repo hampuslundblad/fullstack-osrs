@@ -24,6 +24,8 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 
 WORKDIR /app
 COPY --from=build /app .
+COPY --from=build /root/.dotnet /root/.dotnet
+
 
 EXPOSE 5000
 ENTRYPOINT ["sh", "-c", "dotnet ef database update --verbose && dotnet DotnetComp.dll"]
