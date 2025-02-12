@@ -1,4 +1,10 @@
 services:
+  migrate:
+    image: ghcr.io/hampuslundblad/migrations:main
+    volumes:
+      - ./db/test.db:/app/test.db
+    profiles:
+      - migrate
   nginx:
     depends_on:
       - backend
