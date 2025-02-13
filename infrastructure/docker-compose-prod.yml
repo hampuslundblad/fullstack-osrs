@@ -24,7 +24,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ../backend/DotnetComp/test.db:/app/test.db
+      - ./db/test.db:/app/test.db
     environment:
       - ASPNETCORE_HTTP_PORTS=5000
     env_file:
