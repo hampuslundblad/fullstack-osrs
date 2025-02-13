@@ -17,7 +17,7 @@ function RouteComponent() {
     <Layout title="Home">
       <div className="flex flex-col gap-4 mt-8">
         <div className="flex gap-4">
-          <Title> Test 4</Title>
+          <Title> Test 5</Title>
           <Button
             className="self-start"
             variant={"default"}
