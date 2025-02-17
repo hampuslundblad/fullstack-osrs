@@ -1,4 +1,4 @@
-import { fetchGroup, syncGroup as sendSyncGroup, syncGroup } from "@/api/user";
+import { fetchGroup, syncGroup } from "@/api/user";
 import AddPlayerModal from "@/components/AddPlayerModal";
 import Alert from "@/components/Alert";
 import Layout from "@/components/Layout";
