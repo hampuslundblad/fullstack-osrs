@@ -2,9 +2,11 @@ import { fetchGroup, syncGroup } from "@/api/user";
 import AddPlayerModal from "@/components/AddPlayerModal";
 import Alert from "@/components/Alert";
 import Layout from "@/components/Layout";
+import PageError from "@/components/PageError";
 import PlayerCard from "@/components/PlayerCard";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/useToast";
+import { experienceGainedOverTime } from "@/utils/playerUtils";
 import {
   queryOptions,
   useMutation,
@@ -29,7 +31,7 @@ export const Route = createFileRoute("/_auth/mygroups/$groupName")({
   },
   staleTime: 10 * 60 * 1000, // 10 minutes
   component: RouteComponent,
-  errorComponent: () => <div>Error</div>,
+  errorComponent: () => PageError,
   pendingComponent: () => <div>Loading</div>,
 });
 
@@ -40,7 +42,13 @@ function RouteComponent() {
   const [isPlayerModalOpen, setIsAddPlayerModalOpen] = useState(false);
 
   // Will not be undefined since we're loading it when the user navigates here.
-  const players = groupData?.players;
+  // Sort in descending order of experience gained in the last month
+  const players = groupData?.players.sort((a, b) => {
+    return (
+      experienceGainedOverTime(b.experienceOverTime ?? [], "1M") -
+      experienceGainedOverTime(a.experienceOverTime ?? [], "1M")
+    );
+  });
 
   return (
     <Layout title={groupName} showBackButton>
@@ -57,6 +65,7 @@ function RouteComponent() {
             Delete Group <TrashIcon />
           </Button>
         </div>
+        {/** Display players */}
         <div className="mt-8 flex flex-col gap-8">
           {players && players.map((player) => <PlayerCard player={player} />)}
           {players && players.length === 0 && (

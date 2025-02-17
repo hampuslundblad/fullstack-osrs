@@ -10,12 +10,18 @@ export type Group = {
   players: Player[];
 };
 
+export type PlayerExperience = {
+  experience: number,
+  dateTime: Date
+}
+
 export type Player = {
   playerName: string;
   totalExperience: number;
   experienceGainedLast24H: number;
   experienceGainedLastWeek: number;
   totalLevel: number;
+  experienceOverTime?: PlayerExperience[];
 };
 
 export async function fetchUser(): Promise<User> {

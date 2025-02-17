@@ -2,6 +2,7 @@ import { createGroupOnUser } from "@/api/user";
 import Alert from "@/components/Alert";
 import GroupCard from "@/components/GroupCard";
 import Layout from "@/components/Layout";
+import PageError from "@/components/PageError";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -25,7 +26,7 @@ import { useRef, useState } from "react";
 
 export const Route = createFileRoute("/_auth/mygroups/")({
   component: RouteComponent,
-  errorComponent: () => <div>Error</div>,
+  errorComponent: () => PageError,
 });
 
 function RouteComponent() {

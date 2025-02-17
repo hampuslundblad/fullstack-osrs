@@ -20,7 +20,7 @@ function RouteComponent() {
   return (
     <Layout>
       <div className="flex justify-center items-center h-full">
-        <Card className="w-1/4">
+        <Card className="xl:w-1/4 md:1/2 sm:w-full">
           <CardHeader className="text-center">
             Welcome
             <CardDescription>Log with one of the methods below</CardDescription>

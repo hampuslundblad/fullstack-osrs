@@ -4,8 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { useParams } from "@tanstack/react-router";
 import { UseMutationOptions } from "@tanstack/react-query";
 import ActionModal from "./ActionModal";
+import { experienceGainedOverTime } from "@/utils/playerUtils";
 
 const PlayerCard = ({ player }: { player: Player }) => {
+  const experienceOverTime = player.experienceOverTime ?? [];
+
   return (
     <Card className="w-96">
       <CardHeader>
@@ -17,8 +20,11 @@ const PlayerCard = ({ player }: { player: Player }) => {
       </CardHeader>
       <CardContent>
         <div>
-          <p>Total level : {player.totalLevel}</p>{" "}
-          <p>Experience gained last week : {player.experienceGainedLastWeek}</p>
+          <p>Total level : {player.totalLevel}</p>
+          <p>
+            Experience gained last week:{" "}
+            {experienceGainedOverTime(experienceOverTime, "1W")}
+          </p>
         </div>
       </CardContent>
     </Card>

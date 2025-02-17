@@ -1,3 +1,4 @@
+import PageError from "@/components/PageError";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import Title from "@/components/ui/title";
@@ -7,12 +8,12 @@ import { useState } from "react";
 
 export const Route = createLazyFileRoute("/")({
   component: RouteComponent,
+  errorComponent: PageError,
 });
 
 function RouteComponent() {
   const [isLoading, setIsLoading] = useState(false);
-  console.log(import.meta.env);
-
+  throw new Error();
   return (
     <Layout title="Home">
       <div className="flex flex-col gap-4 mt-8">
