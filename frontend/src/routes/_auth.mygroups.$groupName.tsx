@@ -1,12 +1,18 @@
-import { fetchGroup } from "@/api/user";
+import { fetchGroup, syncGroup as sendSyncGroup, syncGroup } from "@/api/user";
 import AddPlayerModal from "@/components/AddPlayerModal";
 import Alert from "@/components/Alert";
 import Layout from "@/components/Layout";
 import PlayerCard from "@/components/PlayerCard";
 import { Button } from "@/components/ui/button";
-import { queryOptions, useQuery } from "@tanstack/react-query";
+import { useToast } from "@/hooks/useToast";
+import {
+  queryOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { TrashIcon } from "lucide-react";
+import { RefreshCwIcon, TrashIcon } from "lucide-react";
 import { useState } from "react";
 
 const groupQueryOptions = (groupName: string) =>
@@ -44,6 +50,9 @@ function RouteComponent() {
             isOpened={isPlayerModalOpen}
             setIsOpened={setIsAddPlayerModalOpen}
           />
+
+          <SyncGroupButton />
+
           <Button variant={"destructive"}>
             Delete Group <TrashIcon />
           </Button>
@@ -62,3 +71,40 @@ function RouteComponent() {
     </Layout>
   );
 }
+
+const SyncGroupButton = () => {
+  const { groupName } = Route.useParams();
+
+  const queryClient = useQueryClient();
+
+  const { toast } = useToast();
+
+  const { mutate: sendSyncGroup, isPending } = useMutation({
+    mutationFn: () => syncGroup(groupName),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["group", groupName] });
+      toast({
+        title: "Group synced!",
+        variant: "success",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Failed to sync group.",
+        description:
+          "This might be due to OSRS API being difficult. Try again in a few minutes",
+        variant: "destructive",
+      });
+    },
+  });
+  return (
+    <Button
+      variant="secondary"
+      onClick={() => sendSyncGroup()}
+      isLoading={isPending}
+    >
+      Sync group
+      {!isPending && <RefreshCwIcon />}
+    </Button>
+  );
+};

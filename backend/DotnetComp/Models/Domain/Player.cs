@@ -15,6 +15,8 @@ namespace DotnetComp.Models.Domain
         public required int TotalExperience { get; set; }
         public required int TotalLevel { get; set; }
 
+        public required List<PlayerExperience> ExperienceOverTime { get; set; }
+
         public static Player ToDomain(PlayerEntity playerEntity)
         {
             return new Player
@@ -24,6 +26,10 @@ namespace DotnetComp.Models.Domain
                 ExperienceGainedLastWeek = playerEntity.ExperienceGainedLastWeek,
                 TotalExperience = playerEntity.TotalExperience,
                 TotalLevel = playerEntity.TotalLevel,
+                ExperienceOverTime = playerEntity
+                    .PlayerExperiences.Select(PlayerExperience.ToDomain)
+                    .OrderByDescending(pe => pe.DateTime)
+                    .ToList(),
             };
         }
 

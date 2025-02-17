@@ -23,7 +23,6 @@ namespace DotnetComp.Controllers.v1
             return Challenge(
                 new AuthenticationProperties() { RedirectUri = returnUrl },
                 authenticationSchemes: ["github"]
-                
             );
         }
     }

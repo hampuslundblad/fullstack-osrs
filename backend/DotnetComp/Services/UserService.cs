@@ -25,6 +25,7 @@ namespace DotnetComp.Services
             string groupName,
             string playerName
         );
+        Task<BaseResult> SyncPlayerExperienceOnGroup(string userAuthId, string groupName);
     }
 
     public class UserService(
@@ -43,7 +44,7 @@ namespace DotnetComp.Services
         {
             try
             {
-                var user = await userRepository.GetUserAsync(authUserId);
+                var user = await userRepository.GetUserIncludingGroupsAndPlayersAsync(authUserId);
                 if (user != null)
                 {
                     logger.LogInformation("User exists, returning user");
@@ -59,16 +60,15 @@ namespace DotnetComp.Services
             try
             {
                 // Create user
-                UserEntity userEntity =
-                    new()
+                UserEntity userEntity = new()
+                {
+                    Username = "basic user",
+                    AuthProvider = new AuthProviderEntity()
                     {
-                        Username = "basic user",
-                        AuthProvider = new AuthProviderEntity()
-                        {
-                            Name = "github",
-                            AuthProviderUserId = authUserId,
-                        },
-                    };
+                        Name = "github",
+                        AuthProviderUserId = authUserId,
+                    },
+                };
 
                 var user = await userRepository.CreateUserAsync(userEntity);
                 logger.LogInformation("User didn't already exist, created a new user.");
@@ -103,7 +103,7 @@ namespace DotnetComp.Services
         {
             try
             {
-                var userEntity = await userRepository.GetUserAsync(authUserId);
+                var userEntity = await userRepository.GetUserIncludingGroupsAsync(authUserId);
                 if (userEntity == null)
                 {
                     logger.LogInformation("User didn't exist");
@@ -142,7 +142,9 @@ namespace DotnetComp.Services
             string playerName
         )
         {
-            UserEntity? userEntity = await userRepository.GetUserAsync(authUserId);
+            UserEntity? userEntity = await userRepository.GetUserIncludingGroupsAndPlayersAsync(
+                authUserId
+            );
 
             if (userEntity == null)
             {
@@ -166,7 +168,7 @@ namespace DotnetComp.Services
             }
 
             // Get player
-            var playerEntityResult = await playerService.GetOrCreatePlayer(playerName);
+            var playerEntityResult = await playerService.GetOrCreatePlayerAsync(playerName);
 
             if (!playerEntityResult.IsSuccess)
             {
@@ -180,7 +182,8 @@ namespace DotnetComp.Services
 
         public async Task<Result<Group>> GetGroupAsync(string userAuthId, string groupName)
         {
-            var userEntity = await userRepository.GetUserAsync(userAuthId);
+            var userEntity =
+                await userRepository.GetUserIncludingGroupsAndPlayersAndExperienceAsync(userAuthId);
             if (userEntity == null)
             {
                 return Result<Group>.Failure(UserServiceError.UserNotFound(userAuthId));
@@ -200,7 +203,9 @@ namespace DotnetComp.Services
             string playerName
         )
         {
-            UserEntity? userEntity = await userRepository.GetUserAsync(userAuthId);
+            UserEntity? userEntity = await userRepository.GetUserIncludingGroupsAndPlayersAsync(
+                userAuthId
+            );
 
             if (userEntity == null)
             {
@@ -225,5 +230,42 @@ namespace DotnetComp.Services
             await groupRepository.UpdateAsync(groupEntity);
             return BaseResult.Success();
         }
-    }
+
+        public async Task<BaseResult> SyncPlayerExperienceOnGroup(
+            string userAuthId,
+            string groupName
+        )
+        {
+            var userEntity = await userRepository.GetUserIncludingGroupsAndPlayersAsync(userAuthId);
+            if (userEntity == null)
+            {
+                return BaseResult.Failure(UserServiceError.UserNotFound(userAuthId));
+            }
+
+            var user = User.ToDomain(userEntity);
+
+            var group = user.Groups.FirstOrDefault(g => g.GroupName == groupName);
+
+            if (group == null)
+                return BaseResult.Failure(UserServiceError.GroupNotFound(groupName));
+
+            foreach (Player player in group.Players)
+            {
+                logger.LogInformation(
+                    "Adding experience entry for player {playerName}...",
+                    player.PlayerName
+                );
+                var playerHiscoreResult = await playerService.AddExperienceEntryForTodaysDateAsync(
+                    player.PlayerName
+                );
+
+                if (!playerHiscoreResult.IsSuccess)
+                {
+                    await Task.Delay(500);
+                    return BaseResult.Failure(UserServiceError.ErrorWhileGettingPlayer());
+                }
+            }
+            return BaseResult.Success();
+        }
+    };
 }

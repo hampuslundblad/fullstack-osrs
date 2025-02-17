@@ -12,9 +12,12 @@ namespace DotnetComp.Errors
             return BaseError.NotFound("PlayerHiscoreError.NotFound", "Player not found");
         }
 
-        public static BaseError ServiceError()
+        public static BaseError ServiceError(string? message = null)
         {
-            return BaseError.Failure("PlayerHiscoreError.ServiceError", "Service error");
+            return BaseError.Failure(
+                "PlayerHiscoreError.ServiceError",
+                "Service error - " + message
+            );
         }
 
         public static BaseError ConversionError()

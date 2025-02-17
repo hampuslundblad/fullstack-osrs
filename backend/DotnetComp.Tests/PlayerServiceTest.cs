@@ -16,24 +16,32 @@ namespace DotnetComp.Tests
     {
         private readonly Mock<IPlayerRepository> mockPlayerRepository;
         private readonly Mock<ILogger<PlayerService>> mockLogger;
+
+        private readonly Mock<IHiscoreService> mockHiscoreService;
         private readonly PlayerService playerService;
 
         public PlayerServiceTest()
         {
             mockPlayerRepository = new Mock<IPlayerRepository>();
             mockLogger = new Mock<ILogger<PlayerService>>();
-            playerService = new PlayerService(mockLogger.Object, mockPlayerRepository.Object);
+            mockHiscoreService = new Mock<IHiscoreService>();
+            playerService = new PlayerService(
+                mockLogger.Object,
+                mockPlayerRepository.Object,
+                mockHiscoreService.Object
+            );
         }
 
         [Fact]
         public async Task GetPlayer_ReturnsPlayer_WhenPlayerExists()
         {
             // Arrange
-            var playerName = "testPlayer";
+            var playerName = "existingPlayer";
             var player = new PlayerEntity
             {
                 PlayerName = playerName,
                 TotalExperience = 123,
+                TotalLevel = 1234,
                 ExperienceGainedLast24H = 10,
                 ExperienceGainedLastWeek = 10,
             };
@@ -42,44 +50,11 @@ namespace DotnetComp.Tests
                 .ReturnsAsync(player);
 
             // Act
-            var result = await playerService.GetPlayer(playerName);
+            var result = await playerService.GetOrCreatePlayerAsync(playerName);
 
             // Assert
             Assert.True(result.IsSuccess);
             Assert.Equal(playerName, result.Value.PlayerName);
-        }
-
-        [Fact]
-        public async Task GetPlayer_ReturnsNotFound_WhenPlayerDoesNotExist()
-        {
-            // Arrange
-            var playerName = "nonExistentPlayer";
-            _ = mockPlayerRepository
-                .Setup(repo => repo.GetByPlayerName(playerName))
-                .ReturnsAsync((PlayerEntity?)null);
-
-            // Act
-            var result = await playerService.GetPlayer(playerName);
-
-            // Assert
-            Assert.NotNull(result.Error);
-            Assert.Equal(ErrorType.NotFound, result.Error.ErrorType);
-        }
-
-        [Fact]
-        public async Task CreatePlayer_ReturnsSuccess_WhenPlayerIsCreated()
-        {
-            // Arrange
-            var playerName = "newPlayer";
-            mockPlayerRepository
-                .Setup(repo => repo.Create(playerName))
-                .ReturnsAsync(new PlayerEntity { PlayerName = playerName });
-
-            // Act
-            var result = await playerService.CreatePlayer(playerName);
-
-            // Assert
-            Assert.True(result.IsSuccess);
         }
     }
 }

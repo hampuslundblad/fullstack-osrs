@@ -47,3 +47,7 @@ export async function removePlayerFromGroup(
 ): Promise<void> {
   await apiClient.delete(`user/group/${groupName}/player/${playerName}`);
 }
+
+export async function syncGroup(groupName: string): Promise<void> {
+  await apiClient.put(`user/group/${groupName}/sync`);
+}

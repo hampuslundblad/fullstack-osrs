@@ -13,18 +13,18 @@ namespace DotnetComp.Repositories
     {
         Task<PlayerEntity?> GetByPlayerName(string name);
 
+        Task<PlayerEntity?> GetByPlayerNameDetailed(string name);
         Task<PlayerEntity> Create(PlayerEntity playerEntity);
+        Task Update(PlayerEntity player);
     }
 
     public class PlayerRepository(DatabaseContext dbContext) : IPlayerRepository
     {
         private readonly DatabaseContext dbContext = dbContext;
 
-        public async Task<PlayerEntity?> GetByPlayerName(string playerName)
+        public async Task<PlayerEntity?> GetByPlayerName(string name)
         {
-            return await dbContext
-                .Players.Where(p => p.PlayerName == playerName)
-                .FirstOrDefaultAsync();
+            return await dbContext.Players.Where(p => p.PlayerName == name).FirstOrDefaultAsync();
         }
 
         public async Task<PlayerEntity> Create(PlayerEntity playerEntity)
@@ -32,6 +32,20 @@ namespace DotnetComp.Repositories
             var result = await dbContext.Players.AddAsync(playerEntity);
             await dbContext.SaveChangesAsync();
             return result.Entity;
+        }
+
+        public async Task Update(PlayerEntity player)
+        {
+            dbContext.Players.Update(player);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<PlayerEntity?> GetByPlayerNameDetailed(string name)
+        {
+            return await dbContext
+                .Players.Where(p => p.PlayerName == name)
+                .Include(p => p.PlayerExperiences)
+                .FirstOrDefaultAsync();
         }
     }
 }

@@ -31,7 +31,7 @@ namespace DotnetComp.Controllers.v1
         public async Task<ActionResult> GetOrCreateUser()
         {
             var userIdClaim = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "sub");
-            
+
             var userAuthId = userIdClaim!.Value;
 
             var result = await userService.FindOrCreateUserAsync(userAuthId);
@@ -47,7 +47,6 @@ namespace DotnetComp.Controllers.v1
                     };
                 }
             );
-            
         }
 
         [Authorize]
@@ -143,12 +142,37 @@ namespace DotnetComp.Controllers.v1
         }
 
         [Authorize]
+        [HttpPut("group/{groupName}/sync")]
+        public async Task<IActionResult> SyncPlayerExperienceOnGroup(string groupName)
+        {
+            var userIdClaim = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "sub");
+            var userAuthId = userIdClaim!.Value;
+
+            var result = await userService.SyncPlayerExperienceOnGroup(userAuthId, groupName);
+
+            return result.Match(
+                onSuccess: () => Ok("Synced players experience"),
+                onFailure: (error) =>
+                {
+                    return error.ErrorType switch
+                    {
+                        ErrorType.Failure => StatusCode(500, "Internal service error"),
+                        ErrorType.NotFound => BadRequest("Group or user not found"),
+                        _ => StatusCode(500, "unkown error"),
+                    };
+                }
+            );
+        }
+
+        [Authorize]
         [HttpDelete("group/{groupName}/player/{playerName}")]
         public async Task<IActionResult> RemovePlayerFromGroup(string groupName, string playerName)
         {
             var userIdClaim = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "sub");
             var userAuthId = userIdClaim!.Value;
+
             var result = await userService.RemovePlayerFromGroup(userAuthId, groupName, playerName);
+
             return result.Match(
                 onSuccess: () => StatusCode(204, "Player has been removed from the group"),
                 onFailure: (error) =>

@@ -18,6 +18,6 @@ namespace DotnetComp.Models.Entities
 
         public ICollection<GroupEntity> Groups { get; set; } = [];
 
-        public ICollection<PlayerExperience> PlayerExperiences { get; set; } = [];
+        public ICollection<PlayerExperienceEntity> PlayerExperiences { get; set; } = [];
     }
 }

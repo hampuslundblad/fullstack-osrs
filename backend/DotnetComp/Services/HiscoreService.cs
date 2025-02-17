@@ -26,10 +26,15 @@ namespace DotnetComp.Services
 
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
+                logger.LogError("Player {name} not found", name);
                 return Result<PlayerHiscore>.Failure(PlayerHiscoreError.NotFound());
             }
             if (!response.IsSuccessStatusCode)
             {
+                logger.LogError(
+                    "Failed to fetch player hiscore data {StatusCode}",
+                    response.StatusCode
+                );
                 return Result<PlayerHiscore>.Failure(PlayerHiscoreError.ServiceError());
             }
 

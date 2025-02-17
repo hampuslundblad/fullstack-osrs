@@ -3,6 +3,7 @@ using System;
 using DotnetComp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DotnetComp.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class GroupContextModelSnapshot : ModelSnapshot
+    [Migration("20250217082650_AddPlayerExperienceColumn")]
+    partial class AddPlayerExperienceColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -91,13 +94,13 @@ namespace DotnetComp.Migrations
                     b.ToTable("Players");
                 });
 
-            modelBuilder.Entity("DotnetComp.Models.Entities.PlayerExperienceEntity", b =>
+            modelBuilder.Entity("DotnetComp.Models.Entities.PlayerExperience", b =>
                 {
                     b.Property<int>("PlayerExperienceId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("DateTime")
+                    b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Experience")
@@ -113,7 +116,7 @@ namespace DotnetComp.Migrations
 
                     b.HasIndex("PlayerEntityPlayerId");
 
-                    b.ToTable("PlayerExperienceEntity");
+                    b.ToTable("PlayerExperience");
                 });
 
             modelBuilder.Entity("DotnetComp.Models.Entities.UserEntity", b =>
@@ -169,7 +172,7 @@ namespace DotnetComp.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("DotnetComp.Models.Entities.PlayerExperienceEntity", b =>
+            modelBuilder.Entity("DotnetComp.Models.Entities.PlayerExperience", b =>
                 {
                     b.HasOne("DotnetComp.Models.Entities.PlayerEntity", null)
                         .WithMany("PlayerExperiences")

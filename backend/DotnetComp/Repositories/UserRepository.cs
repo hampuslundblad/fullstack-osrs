@@ -13,6 +13,11 @@ namespace DotnetComp.Repositories
     {
         Task<UserEntity?> GetUserAsync(string userAuthId);
 
+        Task<UserEntity?> GetUserIncludingGroupsAsync(string userAuthId);
+        Task<UserEntity?> GetUserIncludingGroupsAndPlayersAsync(string userAuthId);
+
+        Task<UserEntity?> GetUserIncludingGroupsAndPlayersAndExperienceAsync(string userAuthId);
+
         Task UpdateAsync(UserEntity userEntity);
         Task<UserEntity> CreateUserAsync(UserEntity user);
         Task<UserEntity?> AddGroupToUserAsync(string username, string groupName);
@@ -30,10 +35,35 @@ namespace DotnetComp.Repositories
 
         public async Task<UserEntity?> GetUserAsync(string userAuthId)
         {
-            UserEntity? userEntity = await dbContext
-                .Users.Where(u => u.AuthProvider.AuthProviderUserId == userAuthId)
+            UserEntity? userEntity = await GetUserQuery(userAuthId).FirstOrDefaultAsync();
+            return userEntity;
+        }
+
+        public async Task<UserEntity?> GetUserIncludingGroupsAsync(string userAuthId)
+        {
+            UserEntity? userEntity = await GetUserQuery(userAuthId)
+                .Include(u => u.Groups)
+                .FirstOrDefaultAsync();
+            return userEntity;
+        }
+
+        public async Task<UserEntity?> GetUserIncludingGroupsAndPlayersAsync(string userAuthId)
+        {
+            UserEntity? userEntity = await GetUserQuery(userAuthId)
                 .Include(u => u.Groups)
                 .ThenInclude(p => p.Players)
+                .FirstOrDefaultAsync();
+            return userEntity;
+        }
+
+        public async Task<UserEntity?> GetUserIncludingGroupsAndPlayersAndExperienceAsync(
+            string userAuthId
+        )
+        {
+            UserEntity? userEntity = await GetUserQuery(userAuthId)
+                .Include(u => u.Groups)
+                .ThenInclude(p => p.Players)
+                .ThenInclude(p => p.PlayerExperiences)
                 .FirstOrDefaultAsync();
             return userEntity;
         }
@@ -85,6 +115,13 @@ namespace DotnetComp.Repositories
             group.Players.Add(playerEntity);
             await dbContext.SaveChangesAsync();
             return userEntity;
+        }
+
+        private IQueryable<UserEntity> GetUserQuery(string userAuthId)
+        {
+            return dbContext
+                .Users.Where(u => u.AuthProvider.AuthProviderUserId == userAuthId)
+                .Include(u => u.AuthProvider);
         }
     }
 }

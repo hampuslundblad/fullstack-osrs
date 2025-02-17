@@ -25,6 +25,11 @@ namespace DotnetComp.Errors
             );
         }
 
+        public static BaseError DbError()
+        {
+            return BaseError.Failure("PlayerServiceError.DbError", "Error when accessing database");
+        }
+
         public static BaseError CreatePlayerError()
         {
             return BaseError.Failure(

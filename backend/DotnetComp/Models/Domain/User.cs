@@ -15,18 +15,12 @@ namespace DotnetComp.Models.Domain
 
         public static User ToDomain(UserEntity userEntity)
         {
-            User user =
-                new()
-                {
-                    Username = userEntity.Username,
-                    Groups = [.. userEntity.Groups.Select(g => Group.ToDomain(g))],
-                };
+            User user = new()
+            {
+                Username = userEntity.Username,
+                Groups = [.. userEntity.Groups.Select(g => Group.ToDomain(g))],
+            };
             return user;
-        }
-
-        public static implicit operator User(UserService v)
-        {
-            throw new NotImplementedException();
         }
     }
 }

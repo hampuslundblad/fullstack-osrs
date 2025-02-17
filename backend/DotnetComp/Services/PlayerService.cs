@@ -10,7 +10,11 @@ namespace DotnetComp.Services
 {
     public interface IPlayerService
     {
-        Task<Result<PlayerEntity>> GetOrCreatePlayer(string playerName);
+        Task<Result<PlayerEntity>> GetOrCreatePlayerAsync(string playerName);
+
+        Task<Result<PlayerEntity>> GetByPlayerNameDetailed(string playerName);
+
+        Task<BaseResult> AddExperienceEntryForTodaysDateAsync(string playerName);
     }
 
     public class PlayerService(
@@ -24,7 +28,7 @@ namespace DotnetComp.Services
         private readonly IHiscoreService hiscoreService = hiscoreService;
         private readonly ILogger<PlayerService> logger = logger;
 
-        public async Task<Result<PlayerEntity>> GetOrCreatePlayer(string playerName)
+        public async Task<Result<PlayerEntity>> GetOrCreatePlayerAsync(string playerName)
         {
             try
             {
@@ -48,15 +52,16 @@ namespace DotnetComp.Services
 
                 if (playerHiscoreResult.IsSuccess)
                 {
-                    Player player =
-                        new()
-                        {
-                            PlayerName = playerHiscoreResult.Value.Name,
-                            TotalExperience = playerHiscoreResult.Value.TotalExperience,
-                            TotalLevel = playerHiscoreResult.Value.TotalLevel,
-                        };
-
+                    logger.LogInformation("Creating player {playerName}", playerName);
+                    Player player = new()
+                    {
+                        PlayerName = playerHiscoreResult.Value.Name,
+                        TotalExperience = playerHiscoreResult.Value.TotalExperience,
+                        TotalLevel = playerHiscoreResult.Value.TotalLevel,
+                        ExperienceOverTime = [],
+                    };
                     var entity = await playerRepository.Create(Player.FromDomain(player));
+
                     return Result<PlayerEntity>.Success(entity);
                 }
                 else
@@ -72,6 +77,81 @@ namespace DotnetComp.Services
                     playerName
                 );
                 return Result<PlayerEntity>.Failure(PlayerServiceErrror.ServiceError());
+            }
+        }
+
+        public async Task<BaseResult> AddExperienceEntryForTodaysDateAsync(string playerName)
+        {
+            var player = await playerRepository.GetByPlayerNameDetailed(playerName);
+
+            if (player == null)
+            {
+                logger.LogError("Player {playerName} not found", playerName);
+                return BaseResult.Failure(PlayerServiceErrror.NotFound());
+            }
+
+            var playerHiscoreResult = await hiscoreService.GetPlayerHiscoreDataAsync(
+                player.PlayerName
+            );
+
+            if (!playerHiscoreResult.IsSuccess)
+            {
+                return BaseResult.Failure(
+                    PlayerHiscoreError.ServiceError("Error when contacting osrs api")
+                );
+            }
+
+            var playerHiscore = playerHiscoreResult.Value;
+
+            var totalExperienceEntryAlreadyExists = player.PlayerExperiences.Any(e =>
+                e.Experience == playerHiscore.TotalExperience
+            );
+
+            if (totalExperienceEntryAlreadyExists)
+            {
+                logger.LogInformation(
+                    "Experience entry for {playerName} already exists, not adding another one",
+                    playerName
+                );
+                return BaseResult.Success();
+            }
+
+            var playerExperience = new PlayerExperienceEntity
+            {
+                PlayerId = player.PlayerId,
+                DateTime = DateTime.Now,
+                Experience = playerHiscore.TotalExperience,
+            };
+
+            try
+            {
+                player.PlayerExperiences.Add(playerExperience);
+                await playerRepository.Update(player);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Error when updating player {playerName}", playerName);
+                return BaseResult.Failure(PlayerServiceErrror.ServiceError());
+            }
+
+            return BaseResult.Success();
+        }
+
+        public async Task<Result<PlayerEntity>> GetByPlayerNameDetailed(string playerName)
+        {
+            try
+            {
+                var player = await playerRepository.GetByPlayerNameDetailed(playerName);
+                if (player == null)
+                {
+                    return Result<PlayerEntity>.Failure(PlayerServiceErrror.NotFound());
+                }
+                return Result<PlayerEntity>.Success(player);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Error when fetching player {playerName}", playerName);
+                return Result<PlayerEntity>.Failure(PlayerServiceErrror.DbError());
             }
         }
     }
