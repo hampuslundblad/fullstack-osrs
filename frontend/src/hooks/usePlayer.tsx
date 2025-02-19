@@ -7,7 +7,7 @@ const usePlayer = (name: string) => {
     queryFn: () => fetchPlayer(name),
     enabled: !!name,
     retry: 0,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    //   staleTime: 1000 * 60 * 5, // 5 minutes
   });
 };
 

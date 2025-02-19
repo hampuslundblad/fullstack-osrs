@@ -5,15 +5,14 @@ import Title from "@/components/ui/title";
 import { Separator } from "@radix-ui/react-separator";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import PageNotFound from "@/components/PageNotFound";
 
 export const Route = createLazyFileRoute("/")({
   component: RouteComponent,
-  errorComponent: PageError,
 });
 
 function RouteComponent() {
   const [isLoading, setIsLoading] = useState(false);
-  throw new Error();
   return (
     <Layout title="Home">
       <div className="flex flex-col gap-4 mt-8">

@@ -28,7 +28,6 @@ export const Route = createFileRoute("/_auth")({
       throw new Error("An error occurred");
     }
   },
-  errorComponent: (error) => <div>Error {`${error.error}`} </div>,
 });
 
 function RouteComponent() {
