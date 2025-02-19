@@ -2,7 +2,6 @@ import { fetchGroup, syncGroup } from "@/api/user";
 import AddPlayerModal from "@/components/AddPlayerModal";
 import Alert from "@/components/Alert";
 import Layout from "@/components/Layout";
-import PageError from "@/components/PageError";
 import PlayerCard from "@/components/PlayerCard";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/useToast";
@@ -31,7 +30,6 @@ export const Route = createFileRoute("/_auth/mygroups/$groupName")({
   },
   staleTime: 10 * 60 * 1000, // 10 minutes
   component: RouteComponent,
-  errorComponent: () => PageError,
   pendingComponent: () => <div>Loading</div>,
 });
 
