@@ -26,7 +26,6 @@ import { useRef, useState } from "react";
 
 export const Route = createFileRoute("/_auth/mygroups/")({
   component: RouteComponent,
-  errorComponent: () => PageError,
 });
 
 function RouteComponent() {
