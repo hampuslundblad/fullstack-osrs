@@ -136,16 +136,12 @@ builder
 
 var app = builder.Build();
 
-// Why did I need this in the first place?
-// app.UsePathBase("/.api");
-
-app.Logger.LogInformation(
-    "Running in development: {IsDevelopment}",
-    app.Environment.IsDevelopment()
-);
-
-// Configure the HTTP request pipeline.
-
+// Apply migrations on startup
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+    dbContext.Database.Migrate();
+}
 
 // Try and fix http redirect_uri instead of https in the github oauth flow.
 app.UseForwardedHeaders(
