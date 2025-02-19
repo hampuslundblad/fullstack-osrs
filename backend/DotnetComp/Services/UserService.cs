@@ -8,8 +8,6 @@ namespace DotnetComp.Services
 {
     public interface IUserService
     {
-        Task<Result<User>> GetUserAsync(string userAuthId);
-
         Task<Result<User>> FindOrCreateUserAsync(string authUserId);
         Task<BaseResult> CreateGroupOnUserAsync(string authUserId, string groupName);
         Task<BaseResult> AddPlayerOnGroupAsync(
@@ -78,24 +76,6 @@ namespace DotnetComp.Services
             catch
             {
                 return Result<User>.Failure(UserServiceError.ErrorWhileCreatingUser(authUserId));
-            }
-        }
-
-        public async Task<Result<User>> GetUserAsync(string username)
-        {
-            try
-            {
-                var user = await userRepository.GetUserAsync(username);
-                if (user == null)
-                {
-                    return Result<User>.Failure(UserServiceError.UserNotFound(username));
-                }
-                return Result<User>.Success(User.ToDomain(user));
-            }
-            catch (Exception e)
-            {
-                logger.LogError("Error when getting user {e}", e);
-                return Result<User>.Failure(UserServiceError.ErrorWhenGettingUser(username));
             }
         }
 

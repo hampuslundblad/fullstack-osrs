@@ -7,8 +7,8 @@ namespace DotnetComp.Tests.Helpers
 {
     public class Constants
     {
-
-        public static readonly string playerHiScoreStringOnlySkills = @"560019,92,6682446
+        public static readonly string playerHiScoreStringOnlySkills =
+            @"560019,92,6682446
 601561,90,5366032
 534693,99,13087387
 496440,99,14860631
@@ -32,7 +32,8 @@ namespace DotnetComp.Tests.Helpers
 393947,81,2420752
 496307,83,2689958";
 
-        public static readonly string playerHiScoreString = @"359002,1990,122848819
+        public static readonly string playerHiScoreString =
+            @"359002,1990,122848819
 560019,92,6682446
 601561,90,5366032
 534693,99,13087387

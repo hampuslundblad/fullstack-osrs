@@ -49,6 +49,12 @@ namespace DotnetComp.Controllers.v1
             );
         }
 
+        /// <summary>
+        ///     Gets a group based on the group name
+        /// </summary>
+        /// <param name="groupName"></param>
+        /// <returns></returns>
+
         [Authorize]
         [HttpGet("group/{groupName}")]
         public async Task<IActionResult> GetGroup(string groupName)
@@ -117,6 +123,11 @@ namespace DotnetComp.Controllers.v1
             );
         }
 
+        /// <summary>
+        ///  Adds a player to a group
+        /// </summary>
+        /// <param name="groupName"> Name of the group</param>
+        /// <param name="playerName"> Name of the player</param>
         [Authorize]
         [HttpPut("group/{groupName}/player/{playerName}")]
         public async Task<IActionResult> AddPlayerToGroup(string groupName, string playerName)

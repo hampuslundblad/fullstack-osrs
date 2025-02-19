@@ -63,8 +63,6 @@ builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-
-
 // Setup database
 var connectionString =
     builder.Configuration.GetConnectionString("sqlite")
@@ -72,7 +70,9 @@ var connectionString =
 
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlite(connectionString));
 
-var githubConfig = builder.Configuration.GetSection("Github") ?? throw new InvalidOperationException("Github config not found");
+var githubConfig =
+    builder.Configuration.GetSection("Github")
+    ?? throw new InvalidOperationException("Github config not found");
 
 // Need to set CookieAuthenticationDefaults here otherwise stack overflow see: https://github.com/dotnet/aspnetcore/issues/42975
 builder
@@ -83,11 +83,10 @@ builder
         {
             options.Events.OnRedirectToLogin = context =>
             {
-            context.Response.StatusCode = 401;
-            return Task.CompletedTask;
+                context.Response.StatusCode = 401;
+                return Task.CompletedTask;
             };
         }
-       
     )
     .AddOAuth(
         "github",
@@ -140,28 +139,28 @@ var app = builder.Build();
 // Why did I need this in the first place?
 // app.UsePathBase("/.api");
 
-app.Logger.LogInformation("Running in development: {IsDevelopment}", app.Environment.IsDevelopment());
+app.Logger.LogInformation(
+    "Running in development: {IsDevelopment}",
+    app.Environment.IsDevelopment()
+);
+
 // Configure the HTTP request pipeline.
 
 
-// Try and fix http redirect_uri instead of https in the github oauth flow. 
-app.UseForwardedHeaders(new ForwardedHeadersOptions
-        {
-            ForwardedHeaders = ForwardedHeaders.XForwardedProto
-        });
-
-
+// Try and fix http redirect_uri instead of https in the github oauth flow.
+app.UseForwardedHeaders(
+    new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedProto }
+);
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 //app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
-
 
 app.MapControllers();
 

@@ -13,12 +13,11 @@ namespace DotnetComp.Tests
         [Fact]
         public void MapStringToSkill_ReturnsSkills_WhenSuccessfull()
         {
-            // Arrange 
+            // Arrange
             var playerHiscoreOnlySkills = Constants.playerHiScoreStringOnlySkills.Split('\n');
-            // Act 
+            // Act
 
             var result = SkillMapper.MapStringToSkill(playerHiscoreOnlySkills);
-
 
             // Assert
             var firstSkill = result.First();
@@ -33,8 +32,6 @@ namespace DotnetComp.Tests
             Assert.Equal(83, result.Last().Level);
             Assert.Equal(496307, lastSkill.Rank);
             Assert.Equal(2689958, lastSkill.Experience);
-
-
         }
     }
 }
