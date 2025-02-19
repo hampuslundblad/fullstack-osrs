@@ -1,11 +1,9 @@
-import PageError from "@/components/PageError";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import Title from "@/components/ui/title";
 import { Separator } from "@radix-ui/react-separator";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import PageNotFound from "@/components/PageNotFound";
 
 export const Route = createLazyFileRoute("/")({
   component: RouteComponent,
