@@ -8,6 +8,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Home, Trophy, User } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
@@ -33,16 +34,23 @@ const items = [
 ];
 
 export const AppSidebar = () => {
+  const { toggleSidebar, isMobile } = useSidebar();
+
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-xl mb-4"></SidebarGroupLabel>
+          <SidebarGroupLabel className="text-xl mb-4">
+            Welcome
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton
+                    onClick={() => (isMobile ? toggleSidebar() : null)}
+                    asChild
+                  >
                     <Link to={item.url} className="text-lg">
                       <item.icon />
                       <span>{item.title}</span>

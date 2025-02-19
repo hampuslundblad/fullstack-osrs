@@ -39,7 +39,7 @@ function RouteComponent() {
 
   const [isPlayerModalOpen, setIsAddPlayerModalOpen] = useState(false);
 
-  // Will not be undefined since we're loading it when the user navigates here.
+  // Players will not be undefined since we're loading it when the user navigates here.
   // Sort in descending order of experience gained in the last month
   const players = groupData?.players.sort((a, b) => {
     return (
@@ -65,7 +65,13 @@ function RouteComponent() {
         </div>
         {/** Display players */}
         <div className="mt-8 flex flex-col gap-8">
-          {players && players.map((player) => <PlayerCard player={player} />)}
+          {players &&
+            players.map((player, index) => (
+              <PlayerCard
+                key={"playercard" + player.playerName + index}
+                player={player}
+              />
+            ))}
           {players && players.length === 0 && (
             <Alert
               className="w-1/2"

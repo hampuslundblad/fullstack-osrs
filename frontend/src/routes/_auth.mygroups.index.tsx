@@ -36,7 +36,9 @@ function RouteComponent() {
       <div className="mt-8 flex flex-col gap-8">
         <CreateGroupDialog />
         <div className="flex gap-4 flex-wrap">
-          {userData.groups.map((group) => GroupCard(group))}
+          {userData.groups.map((group, index) => (
+            <GroupCard key={group.groupName + index} group={group} />
+          ))}
         </div>
       </div>
     </Layout>
@@ -53,9 +55,13 @@ const AddGroupButton = () => {
 
 const CreateGroupDialog = () => {
   const groupNameRef = useRef<HTMLInputElement>(null);
+
   const [isOpened, setIsOpened] = useState(false);
+
   const { toast } = useToast();
+
   const router = useRouter();
+
   const {
     mutate: createGroup,
     isError: isCreateGroupError,
@@ -75,6 +81,7 @@ const CreateGroupDialog = () => {
   const handleOnClick = () => {
     createGroup(groupNameRef.current?.value ?? "");
   };
+
   const handleOnKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       createGroup(groupNameRef.current?.value ?? "");
