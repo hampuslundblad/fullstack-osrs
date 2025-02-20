@@ -20,14 +20,11 @@ export const Route = createFileRoute("/_auth")({
             },
           });
         }
-        // Error other than 401
-        throw redirect({
-          to: "/error",
-        });
       }
       throw new Error("An error occurred");
     }
   },
+  staleTime: 10 * 60 * 1000, // 10 minutes
 });
 
 function RouteComponent() {
