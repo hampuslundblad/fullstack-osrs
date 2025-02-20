@@ -9,8 +9,6 @@ namespace DotnetComp.Models.Entities
 
         [MinLength(3), MaxLength(128)]
         public required string PlayerName { get; set; }
-        public int ExperienceGainedLast24H { get; set; }
-        public int ExperienceGainedLastWeek { get; set; }
 
         public required int TotalExperience { get; set; }
 

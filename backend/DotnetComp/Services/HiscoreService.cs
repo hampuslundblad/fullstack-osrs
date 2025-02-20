@@ -53,8 +53,8 @@ namespace DotnetComp.Services
                 var totalExperience = playerRankTotalLevelAndExperience[2];
 
                 var skillsAsStrings = parts
-                    .Skip(1)
-                    .Where(s => s.Count(c => c == ',') > 1)
+                    .Skip(1) // The first part is the total level and total experience
+                    .Where(s => s.Count(c => c == ',') > 1) // If it's only one ',' then it's not a skill, rather a boss or something else
                     .ToArray();
                 var skills = SkillMapper.MapStringToSkill(skillsAsStrings);
 

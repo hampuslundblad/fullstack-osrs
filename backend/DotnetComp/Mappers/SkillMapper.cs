@@ -4,11 +4,8 @@ namespace DotnetComp.Mappers
 {
     public static class SkillMapper
     {
-        private static readonly int RANK_OFFSET = 0;
-        private static readonly int LEVEL_OFFSET = 1;
-        private static readonly int EXPERIENCE_OFFSET = 2;
-
-        private static readonly string[] skillNamesInOrder = [
+        private static readonly string[] skillNamesInOrder =
+        [
             "Attack",
             "Defence",
             "Strength",
@@ -34,7 +31,6 @@ namespace DotnetComp.Mappers
             "Construction",
         ];
 
-
         public static List<Skill> MapStringToSkill(string[] skillRankLevelExperience)
         {
             var skills = new List<Skill>();
@@ -42,15 +38,7 @@ namespace DotnetComp.Mappers
             {
                 for (int i = 0; i < skillRankLevelExperience.Length; i++)
                 {
-                    var parts = skillRankLevelExperience[i].Split(',');
-                    var skill = new Skill
-                    {
-                        Name = skillNamesInOrder[i],
-                        Rank = int.Parse(parts[RANK_OFFSET]),
-                        Level = int.Parse(parts[LEVEL_OFFSET]),
-                        Experience = int.Parse(parts[EXPERIENCE_OFFSET])
-                    };
-
+                    var skill = Skill.FromString(skillNamesInOrder[i], skillRankLevelExperience[i]);
                     skills.Add(skill);
                 }
 
