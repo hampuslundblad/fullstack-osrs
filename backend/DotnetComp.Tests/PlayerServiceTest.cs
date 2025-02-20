@@ -42,8 +42,6 @@ namespace DotnetComp.Tests
                 PlayerName = playerName,
                 TotalExperience = 123,
                 TotalLevel = 1234,
-                ExperienceGainedLast24H = 10,
-                ExperienceGainedLastWeek = 10,
             };
             mockPlayerRepository
                 .Setup(repo => repo.GetByPlayerName(playerName))
