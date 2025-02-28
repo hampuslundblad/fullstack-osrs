@@ -29,7 +29,7 @@ namespace DotnetComp.Tests
 
             var service = new HiscoreService(mockLogger.Object, mockClient.Object);
 
-            // Act
+            // Acts
             var result = await service.GetPlayerHiscoreDataAsync(playerName);
 
             // Assert

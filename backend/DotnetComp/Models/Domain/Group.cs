@@ -13,12 +13,11 @@ namespace DotnetComp.Models.Domain
 
         public static Group ToDomain(GroupEntity groupEntity)
         {
-            Group group =
-                new()
-                {
-                    GroupName = groupEntity.GroupName,
-                    Players = groupEntity.Players.Select(p => Player.ToDomain(p)).ToList(),
-                };
+            Group group = new()
+            {
+                GroupName = groupEntity.GroupName,
+                Players = groupEntity.Players.Select(p => Player.ToDomain(p)).ToList(),
+            };
             return group;
         }
     }
