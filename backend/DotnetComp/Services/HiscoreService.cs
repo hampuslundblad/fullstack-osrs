@@ -22,7 +22,9 @@ namespace DotnetComp.Services
         private readonly ILogger<HiscoreService> logger = logger;
 
         // The total length of the hiscore list, this can change if Jagex adds more stuff that's tracked by the hiscore
-        private readonly int CURRENT_LIST_TOTAL_LENGTH = 109;
+        private readonly int EXPECTED_TOTAL_LENGTH_OF_HISCORE_ENTRIES = HiscoreData
+            .HiscoreEntries
+            .Count;
 
         public async Task<Result<PlayerHiscore>> GetPlayerHiscoreDataAsync(string name)
         {
@@ -36,7 +38,8 @@ namespace DotnetComp.Services
             if (!response.IsSuccessStatusCode)
             {
                 logger.LogError(
-                    "Failed to fetch player hiscore data {StatusCode}",
+                    "Failed to fetch {name} hiscore data {StatusCode}",
+                    name,
                     response.StatusCode
                 );
                 return Result<PlayerHiscore>.Failure(PlayerHiscoreError.ServiceError());
@@ -51,11 +54,11 @@ namespace DotnetComp.Services
 
                 var parts = responseString.Split(['\n']);
 
-                if (parts.Length > CURRENT_LIST_TOTAL_LENGTH)
+                if (parts.Length > EXPECTED_TOTAL_LENGTH_OF_HISCORE_ENTRIES)
                 {
                     logger.LogError(
                         "The hiscore list is longer than expected, expected {expected} but got {actual}",
-                        CURRENT_LIST_TOTAL_LENGTH,
+                        EXPECTED_TOTAL_LENGTH_OF_HISCORE_ENTRIES,
                         parts.Length
                     );
                     return Result<PlayerHiscore>.Failure(PlayerHiscoreError.ServiceError());

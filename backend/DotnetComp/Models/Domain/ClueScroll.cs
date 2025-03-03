@@ -8,6 +8,7 @@ namespace DotnetComp.Models.Domain
 {
     public enum ClueScrollType
     {
+        Beginner,
         Easy,
         Medium,
         Hard,
@@ -52,27 +53,16 @@ namespace DotnetComp.Models.Domain
 
         private static ClueScrollType ParseClueScrollType(string type)
         {
-            if (type.Contains("Easy", StringComparison.OrdinalIgnoreCase))
+            return type.ToLower() switch
             {
-                return ClueScrollType.Easy;
-            }
-            else if (type.Contains("Medium", StringComparison.OrdinalIgnoreCase))
-            {
-                return ClueScrollType.Medium;
-            }
-            else if (type.Contains("Hard", StringComparison.OrdinalIgnoreCase))
-            {
-                return ClueScrollType.Hard;
-            }
-            else if (type.Contains("Elite", StringComparison.OrdinalIgnoreCase))
-            {
-                return ClueScrollType.Elite;
-            }
-            else if (type.Contains("Master", StringComparison.OrdinalIgnoreCase))
-            {
-                return ClueScrollType.Master;
-            }
-            throw new FormatException($"Invalid clue scroll type {type}");
+                var t when t.Contains("beginner") => ClueScrollType.Beginner,
+                var t when t.Contains("easy") => ClueScrollType.Easy,
+                var t when t.Contains("medium") => ClueScrollType.Medium,
+                var t when t.Contains("hard") => ClueScrollType.Hard,
+                var t when t.Contains("elite") => ClueScrollType.Elite,
+                var t when t.Contains("master") => ClueScrollType.Master,
+                _ => throw new FormatException($"Invalid clue scroll type {type}"),
+            };
         }
     }
 }

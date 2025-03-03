@@ -34,9 +34,12 @@ namespace DotnetComp.Errors
             );
         }
 
-        public static BaseError ErrorWhileGettingPlayer()
+        public static BaseError ErrorWhileGettingPlayer(string playerName)
         {
-            return BaseError.Failure("UserService.Failure", "Error while getting player");
+            return BaseError.Failure(
+                "UserService.Failure",
+                $"Error while getting player {playerName}"
+            );
         }
 
         public static BaseError GroupNotFound(string groupName)

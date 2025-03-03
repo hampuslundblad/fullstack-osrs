@@ -128,6 +128,7 @@ namespace DotnetComp.Controllers.v1
         /// </summary>
         /// <param name="groupName"> Name of the group</param>
         /// <param name="playerName"> Name of the player</param>
+        ///
         [Authorize]
         [HttpPut("group/{groupName}/player/{playerName}")]
         public async Task<IActionResult> AddPlayerToGroup(string groupName, string playerName)
@@ -152,6 +153,11 @@ namespace DotnetComp.Controllers.v1
             );
         }
 
+        /// <summary>
+        ///  Syncs the player experience on a group, will call the osrs api for each player.
+        /// </summary>
+        /// <param name="groupName"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPut("group/{groupName}/sync")]
         public async Task<IActionResult> SyncPlayerExperienceOnGroup(string groupName)
