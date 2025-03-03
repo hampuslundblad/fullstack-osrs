@@ -220,6 +220,13 @@ namespace DotnetComp.Tests
             var groupName = "newGroup";
             var playerName = "newPlayer";
 
+            var playerEntity = new PlayerEntity
+            {
+                PlayerName = playerName,
+                TotalExperience = 1,
+                TotalLevel = 1,
+            };
+
             var userEntity = new UserEntity
             {
                 Username = "authUser",
@@ -228,7 +235,7 @@ namespace DotnetComp.Tests
                     AuthProviderUserId = userAuthId,
                     Name = "github",
                 },
-                Groups = [new GroupEntity { GroupName = groupName, Players = [] }],
+                Groups = [new GroupEntity { GroupName = groupName, Players = [playerEntity] }],
             };
 
             mockUserRepository
