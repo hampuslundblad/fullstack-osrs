@@ -1,5 +1,6 @@
 using System.Net;
 using DotnetComp.Clients;
+using DotnetComp.Models.Domain;
 using DotnetComp.Services;
 using DotnetComp.Tests.Helpers;
 using Microsoft.Extensions.Logging;
@@ -29,7 +30,7 @@ namespace DotnetComp.Tests
 
             var service = new HiscoreService(mockLogger.Object, mockClient.Object);
 
-            // Act
+            // Acts
             var result = await service.GetPlayerHiscoreDataAsync(playerName);
 
             // Assert
@@ -39,6 +40,17 @@ namespace DotnetComp.Tests
             Assert.Equal(1990, result.Value.TotalLevel);
             Assert.Equal(122848819, result.Value.TotalExperience);
             Assert.Equal(92, result.Value.Skills.First().Level);
+
+            Assert.Equal("Rifts closed", result.Value.Minigames.First().Name);
+            Assert.Equal(14, result.Value.Minigames.First().Score);
+
+            Assert.Equal("Artio", result.Value.Bosses.First().Name);
+            Assert.Equal(81, result.Value.Bosses.First().Kills);
+            Assert.Equal(525504, result.Value.Bosses.First().Rank);
+
+            Assert.Equal(1, result.Value.ClueScrolls.First().Completed);
+            Assert.Equal(1866371, result.Value.ClueScrolls.First().Rank);
+            Assert.Equal(ClueScrollType.Beginner, result.Value.ClueScrolls.First().Type);
         }
     }
 }

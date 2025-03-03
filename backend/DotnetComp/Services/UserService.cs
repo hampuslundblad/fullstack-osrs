@@ -152,7 +152,7 @@ namespace DotnetComp.Services
 
             if (!playerEntityResult.IsSuccess)
             {
-                return BaseResult.Failure(UserServiceError.ErrorWhileGettingPlayer());
+                return BaseResult.Failure(UserServiceError.ErrorWhileGettingPlayer(playerName));
             }
             groupEntity.Players.Add(playerEntityResult.Value);
             logger.LogInformation("Updating group");
@@ -229,22 +229,42 @@ namespace DotnetComp.Services
             if (group == null)
                 return BaseResult.Failure(UserServiceError.GroupNotFound(groupName));
 
+            var tasks = new List<Task<BaseResult>>();
+
             foreach (Player player in group.Players)
             {
-                logger.LogInformation(
-                    "Adding experience entry for player {playerName}...",
-                    player.PlayerName
-                );
-                var playerHiscoreResult = await playerService.AddExperienceEntryForTodaysDateAsync(
-                    player.PlayerName
-                );
-
-                if (!playerHiscoreResult.IsSuccess)
+                async Task<BaseResult> SyncPlayerExperience()
                 {
-                    await Task.Delay(500);
-                    return BaseResult.Failure(UserServiceError.ErrorWhileGettingPlayer());
+                    logger.LogInformation(
+                        "Adding experience entry for player {playerName}...",
+                        player.PlayerName
+                    );
+
+                    var playerHiscoreResult =
+                        await playerService.AddExperienceEntryForTodaysDateAsync(player.PlayerName);
+
+                    if (!playerHiscoreResult.IsSuccess)
+                    {
+                        return BaseResult.Failure(
+                            UserServiceError.ErrorWhileGettingPlayer(player.PlayerName)
+                        );
+                    }
+
+                    return BaseResult.Success();
                 }
+
+                // Throttle
+                Task.Delay(500).Wait();
+
+                tasks.Add(SyncPlayerExperience());
             }
+
+            await Task.WhenAll(tasks);
+            if (tasks.Any(t => !t.Result.IsSuccess))
+            {
+                return BaseResult.Failure(UserServiceError.ErrorWhileGettingPlayer("unknown"));
+            }
+
             return BaseResult.Success();
         }
     };

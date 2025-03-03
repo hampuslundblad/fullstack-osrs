@@ -9,8 +9,14 @@ namespace DotnetComp.Models.Domain
     {
         public required string Name { get; set; }
         public required int Rank { get; set; }
-        public required List<Skill> Skills { get; set; }
         public required int TotalExperience { get; set; }
         public required int TotalLevel { get; set; }
+
+        public List<Skill> Skills { get; set; } = [];
+
+        public List<Boss> Bosses { get; set; } = [];
+        public List<ClueScroll> ClueScrolls { get; set; } = [];
+
+        public List<Minigame> Minigames { get; set; } = [];
     }
 }
