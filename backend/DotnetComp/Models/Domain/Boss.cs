@@ -14,7 +14,12 @@ namespace DotnetComp.Models.Domain
 
         public static Boss FromString(string name, string bossString)
         {
-            if (!bossString.Contains(',') && bossString.Where(s => s == ',').Count() != 1)
+            if (bossString.Count(s => s == ',') > 1)
+            {
+                throw new ArgumentException("Boss string must contain a single comma");
+            }
+
+            if (!bossString.Contains(','))
             {
                 throw new ArgumentException("Boss string must contain a comma");
             }

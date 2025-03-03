@@ -2,11 +2,9 @@ using System.Linq;
 using System.Net;
 using DotnetComp.Clients;
 using DotnetComp.Errors;
-using DotnetComp.Mappers;
 using DotnetComp.Models.Domain;
 using DotnetComp.Results;
 using DotnetComp.Utils;
-using Microsoft.OpenApi.Any;
 
 namespace DotnetComp.Services
 {
