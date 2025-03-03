@@ -150,32 +150,5 @@ namespace DotnetComp.Utils
             new("Zulrah", HiscoreEntryType.Boss),
             new("Unkown", HiscoreEntryType.Other),
         ];
-        private static readonly List<HiscoreEntry> Skills =
-        [
-            new("Overall", HiscoreEntryType.Total),
-            new("Attack", HiscoreEntryType.Skill),
-            new("Defence", HiscoreEntryType.Skill),
-            new("Strength", HiscoreEntryType.Skill),
-            new("Hitpoints", HiscoreEntryType.Skill),
-            new("Ranged", HiscoreEntryType.Skill),
-            new("Prayer", HiscoreEntryType.Skill),
-            new("Magic", HiscoreEntryType.Skill),
-            new("Cooking", HiscoreEntryType.Skill),
-            new("Woodcutting", HiscoreEntryType.Skill),
-            new("Fletching", HiscoreEntryType.Skill),
-            new("Fishing", HiscoreEntryType.Skill),
-            new("Firemaking", HiscoreEntryType.Skill),
-            new("Crafting", HiscoreEntryType.Skill),
-            new("Smithing", HiscoreEntryType.Skill),
-            new("Mining", HiscoreEntryType.Skill),
-            new("Herblore", HiscoreEntryType.Skill),
-            new("Agility", HiscoreEntryType.Skill),
-            new("Thieving", HiscoreEntryType.Skill),
-            new("Slayer", HiscoreEntryType.Skill),
-            new("Farming", HiscoreEntryType.Skill),
-            new("Runecrafting", HiscoreEntryType.Skill),
-            new("Hunter", HiscoreEntryType.Skill),
-            new("Construction", HiscoreEntryType.Skill),
-        ];
     }
 }

@@ -152,7 +152,7 @@ namespace DotnetComp.Services
 
             if (!playerEntityResult.IsSuccess)
             {
-                return BaseResult.Failure(UserServiceError.ErrorWhileGettingPlayer());
+                return BaseResult.Failure(UserServiceError.ErrorWhileGettingPlayer(playerName));
             }
             groupEntity.Players.Add(playerEntityResult.Value);
             logger.LogInformation("Updating group");
