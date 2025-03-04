@@ -1,11 +1,11 @@
 using System.ComponentModel.DataAnnotations;
+using DotnetComp.Models.Domain;
 
 namespace DotnetComp.Models.Entities
 {
     public class PlayerEntity
     {
-        [Key]
-        public int PlayerId { get; set; }
+        public int Id { get; set; }
 
         [MinLength(3), MaxLength(128)]
         public required string PlayerName { get; set; }
@@ -17,5 +17,9 @@ namespace DotnetComp.Models.Entities
         public ICollection<GroupEntity> Groups { get; set; } = [];
 
         public ICollection<PlayerExperienceEntity> PlayerExperiences { get; set; } = [];
+
+        public ICollection<PlayerBossKillEntity> PlayerBossKills { get; set; } = [];
+
+        public ICollection<PlayerBossRankEntity> PlayerBossRanks { get; set; } = [];
     }
 }

@@ -3,6 +3,7 @@ using System;
 using DotnetComp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DotnetComp.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class GroupContextModelSnapshot : ModelSnapshot
+    [Migration("20250304104601_AddPlayerBossEntitites")]
+    partial class AddPlayerBossEntitites
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -44,7 +47,7 @@ namespace DotnetComp.Migrations
 
             modelBuilder.Entity("DotnetComp.Models.Entities.GroupEntity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("GroupId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -56,7 +59,7 @@ namespace DotnetComp.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                    b.HasKey("GroupId");
 
                     b.HasIndex("UserId");
 
@@ -78,7 +81,7 @@ namespace DotnetComp.Migrations
                     b.Property<int>("Kills")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("PlayerEntityId")
+                    b.Property<int?>("PlayerEntityPlayerId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("PlayerId")
@@ -86,7 +89,7 @@ namespace DotnetComp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PlayerEntityId");
+                    b.HasIndex("PlayerEntityPlayerId");
 
                     b.ToTable("PlayerBossKillEntity");
                 });
@@ -103,7 +106,7 @@ namespace DotnetComp.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("PlayerEntityId")
+                    b.Property<int?>("PlayerEntityPlayerId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("PlayerId")
@@ -114,14 +117,14 @@ namespace DotnetComp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PlayerEntityId");
+                    b.HasIndex("PlayerEntityPlayerId");
 
                     b.ToTable("PlayerBossRankEntity");
                 });
 
             modelBuilder.Entity("DotnetComp.Models.Entities.PlayerEntity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("PlayerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -136,7 +139,7 @@ namespace DotnetComp.Migrations
                     b.Property<int>("TotalLevel")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                    b.HasKey("PlayerId");
 
                     b.ToTable("Players");
                 });
@@ -153,7 +156,7 @@ namespace DotnetComp.Migrations
                     b.Property<int>("Experience")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("PlayerEntityId")
+                    b.Property<int?>("PlayerEntityPlayerId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("PlayerId")
@@ -161,7 +164,7 @@ namespace DotnetComp.Migrations
 
                     b.HasKey("PlayerExperienceId");
 
-                    b.HasIndex("PlayerEntityId");
+                    b.HasIndex("PlayerEntityPlayerId");
 
                     b.ToTable("PlayerExperienceEntity");
                 });
@@ -184,15 +187,15 @@ namespace DotnetComp.Migrations
 
             modelBuilder.Entity("GroupEntityPlayerEntity", b =>
                 {
-                    b.Property<int>("GroupsId")
+                    b.Property<int>("GroupsGroupId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("PlayersId")
+                    b.Property<int>("PlayersPlayerId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("GroupsId", "PlayersId");
+                    b.HasKey("GroupsGroupId", "PlayersPlayerId");
 
-                    b.HasIndex("PlayersId");
+                    b.HasIndex("PlayersPlayerId");
 
                     b.ToTable("GroupEntityPlayerEntity");
                 });
@@ -223,34 +226,34 @@ namespace DotnetComp.Migrations
                 {
                     b.HasOne("DotnetComp.Models.Entities.PlayerEntity", null)
                         .WithMany("PlayerBossKills")
-                        .HasForeignKey("PlayerEntityId");
+                        .HasForeignKey("PlayerEntityPlayerId");
                 });
 
             modelBuilder.Entity("DotnetComp.Models.Entities.PlayerBossRankEntity", b =>
                 {
                     b.HasOne("DotnetComp.Models.Entities.PlayerEntity", null)
                         .WithMany("PlayerBossRanks")
-                        .HasForeignKey("PlayerEntityId");
+                        .HasForeignKey("PlayerEntityPlayerId");
                 });
 
             modelBuilder.Entity("DotnetComp.Models.Entities.PlayerExperienceEntity", b =>
                 {
                     b.HasOne("DotnetComp.Models.Entities.PlayerEntity", null)
                         .WithMany("PlayerExperiences")
-                        .HasForeignKey("PlayerEntityId");
+                        .HasForeignKey("PlayerEntityPlayerId");
                 });
 
             modelBuilder.Entity("GroupEntityPlayerEntity", b =>
                 {
                     b.HasOne("DotnetComp.Models.Entities.GroupEntity", null)
                         .WithMany()
-                        .HasForeignKey("GroupsId")
+                        .HasForeignKey("GroupsGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DotnetComp.Models.Entities.PlayerEntity", null)
                         .WithMany()
-                        .HasForeignKey("PlayersId")
+                        .HasForeignKey("PlayersPlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

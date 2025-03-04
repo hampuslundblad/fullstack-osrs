@@ -9,5 +9,10 @@ namespace DotnetComp.Data
         public required DbSet<AuthProviderEntity> AuthProviders { get; set; }
         public required DbSet<GroupEntity> Groups { get; set; }
         public required DbSet<PlayerEntity> Players { get; set; }
+        public required DbSet<PlayerExperienceEntity> PlayerExperiences { get; set; }
+
+        public required DbSet<BossEntity> Bosses { get; set; }
+        public required DbSet<PlayerBossKillEntity> PlayerBossKills { get; set; }
+        public required DbSet<PlayerBossRankEntity> PlayerBossRanks { get; set; }
     }
 }

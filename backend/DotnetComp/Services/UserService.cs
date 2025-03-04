@@ -164,16 +164,19 @@ namespace DotnetComp.Services
         {
             var userEntity =
                 await userRepository.GetUserIncludingGroupsAndPlayersAndExperienceAsync(userAuthId);
+
             if (userEntity == null)
             {
                 return Result<Group>.Failure(UserServiceError.UserNotFound(userAuthId));
             }
 
             var groupEntity = userEntity.Groups.FirstOrDefault(g => g.GroupName == groupName);
+
             if (groupEntity == null)
             {
                 return Result<Group>.Failure(UserServiceError.GroupNotFound(groupName));
             }
+
             return Result<Group>.Success(Group.ToDomain(groupEntity));
         }
 

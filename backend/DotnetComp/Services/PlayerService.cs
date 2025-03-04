@@ -118,7 +118,7 @@ namespace DotnetComp.Services
 
             var playerExperience = new PlayerExperienceEntity
             {
-                PlayerId = player.PlayerId,
+                PlayerId = player.Id,
                 DateTime = DateTime.Now,
                 Experience = playerHiscore.TotalExperience,
             };

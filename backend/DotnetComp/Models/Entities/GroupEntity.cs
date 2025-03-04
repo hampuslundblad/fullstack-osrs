@@ -4,8 +4,7 @@ namespace DotnetComp.Models.Entities
 {
     public class GroupEntity
     {
-        [Key]
-        public int GroupId { get; set; }
+        public int Id { get; set; }
 
         [MinLength(3), MaxLength(32)]
         public required string GroupName { get; set; }
