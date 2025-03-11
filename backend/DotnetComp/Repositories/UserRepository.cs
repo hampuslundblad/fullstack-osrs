@@ -20,13 +20,6 @@ namespace DotnetComp.Repositories
 
         Task UpdateAsync(UserEntity userEntity);
         Task<UserEntity> CreateUserAsync(UserEntity user);
-        Task<UserEntity?> AddGroupToUserAsync(string username, string groupName);
-
-        Task<UserEntity?> AddPlayerToGroupAsync(
-            UserEntity userEntity,
-            string groupName,
-            PlayerEntity playerEntity
-        );
     }
 
     public class UserRepository(DatabaseContext dbContext) : IUserRepository
@@ -79,42 +72,6 @@ namespace DotnetComp.Repositories
             var result = await dbContext.AddAsync(user);
             await dbContext.SaveChangesAsync();
             return result.Entity;
-        }
-
-        public async Task<UserEntity?> AddGroupToUserAsync(string userAuthId, string groupName)
-        {
-            // Get user and corresponding groups
-            var user = dbContext
-                .Users.Include(u => u.Groups)
-                .Where(u => u.AuthProvider.AuthProviderUserId == userAuthId)
-                .FirstOrDefault();
-
-            if (user == null)
-            {
-                return null;
-            }
-
-            var groupEntity = new GroupEntity() { GroupName = groupName };
-            user.Groups.Add(groupEntity);
-
-            await dbContext.SaveChangesAsync();
-            return user;
-        }
-
-        public async Task<UserEntity?> AddPlayerToGroupAsync(
-            UserEntity userEntity,
-            string groupName,
-            PlayerEntity playerEntity
-        )
-        {
-            var group = userEntity.Groups.FirstOrDefault(x => x.GroupName == groupName);
-            if (group == null)
-            {
-                return null;
-            }
-            group.Players.Add(playerEntity);
-            await dbContext.SaveChangesAsync();
-            return userEntity;
         }
 
         private IQueryable<UserEntity> GetUserQuery(string userAuthId)
