@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
-using DotnetComp.Models.Domain;
-using Microsoft.EntityFrameworkCore;
 
 namespace DotnetComp.Models.Entities
 {
@@ -17,7 +11,6 @@ namespace DotnetComp.Models.Entities
         public required string Name { get; set; }
 
         // This the id that's provided by the auth provider to identify the user.
-
         public required string AuthProviderUserId { get; set; }
 
         public int UserId { get; set; }
