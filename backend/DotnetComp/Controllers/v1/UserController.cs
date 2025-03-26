@@ -108,7 +108,7 @@ namespace DotnetComp.Controllers.v1
                 return BadRequest("Group name is too short or too long");
             }
 
-            var result = await userService.CreateGroupOnUserAsync(userIdClaim.Value, groupName);
+            var result = await userService.CreateGroupOnUserAsync(userAuthId, groupName);
             return result.Match<IActionResult>(
                 onSuccess: () => NoContent(),
                 onFailure: (error) =>
