@@ -79,6 +79,7 @@ namespace DotnetComp.Services
             }
         }
 
+        //TODO Move to group service?
         public async Task<BaseResult> CreateGroupOnUserAsync(string authUserId, string groupName)
         {
             try
@@ -116,6 +117,7 @@ namespace DotnetComp.Services
             }
         }
 
+        //TODO: Move to group service?
         public async Task<BaseResult> AddPlayerOnGroupAsync(
             string authUserId,
             string groupName,
@@ -160,6 +162,7 @@ namespace DotnetComp.Services
             return BaseResult.Success();
         }
 
+        //TODO: Move to group service?
         public async Task<Result<Group>> GetGroupAsync(string userAuthId, string groupName)
         {
             var userEntity =
@@ -177,6 +180,7 @@ namespace DotnetComp.Services
             return Result<Group>.Success(Group.ToDomain(groupEntity));
         }
 
+        //TODO: Move to GroupiService?
         public async Task<BaseResult> RemovePlayerFromGroup(
             string userAuthId,
             string groupName,
@@ -211,6 +215,7 @@ namespace DotnetComp.Services
             return BaseResult.Success();
         }
 
+        // Move to GroupService?
         public async Task<BaseResult> SyncPlayerExperienceOnGroup(
             string userAuthId,
             string groupName

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DotnetComp.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20250220083928_RemoveTwoUnusedColumns")]
-    partial class RemoveTwoUnusedColumns
+    [Migration("20250320135731_Fix")]
+    partial class Fix
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,24 @@ namespace DotnetComp.Migrations
                     b.ToTable("AuthProviders");
                 });
 
+            modelBuilder.Entity("DotnetComp.Models.Entities.BossEntity", b =>
+                {
+                    b.Property<int>("BossId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("BossId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Bosses");
+                });
+
             modelBuilder.Entity("DotnetComp.Models.Entities.GroupEntity", b =>
                 {
                     b.Property<int>("GroupId")
@@ -64,6 +82,37 @@ namespace DotnetComp.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Groups");
+                });
+
+            modelBuilder.Entity("DotnetComp.Models.Entities.PlayerBossStat", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("BossId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Kills")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("PlayerEntityPlayerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Rank")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlayerEntityPlayerId");
+
+                    b.ToTable("PlayerBossStats");
                 });
 
             modelBuilder.Entity("DotnetComp.Models.Entities.PlayerEntity", b =>
@@ -166,6 +215,13 @@ namespace DotnetComp.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("DotnetComp.Models.Entities.PlayerBossStat", b =>
+                {
+                    b.HasOne("DotnetComp.Models.Entities.PlayerEntity", null)
+                        .WithMany("PlayerBossStats")
+                        .HasForeignKey("PlayerEntityPlayerId");
+                });
+
             modelBuilder.Entity("DotnetComp.Models.Entities.PlayerExperienceEntity", b =>
                 {
                     b.HasOne("DotnetComp.Models.Entities.PlayerEntity", null)
@@ -190,6 +246,8 @@ namespace DotnetComp.Migrations
 
             modelBuilder.Entity("DotnetComp.Models.Entities.PlayerEntity", b =>
                 {
+                    b.Navigation("PlayerBossStats");
+
                     b.Navigation("PlayerExperiences");
                 });
 

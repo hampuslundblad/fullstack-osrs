@@ -9,5 +9,14 @@ namespace DotnetComp.Data
         public required DbSet<AuthProviderEntity> AuthProviders { get; set; }
         public required DbSet<GroupEntity> Groups { get; set; }
         public required DbSet<PlayerEntity> Players { get; set; }
+
+        public required DbSet<PlayerBossStat> PlayerBossStats { get; set; }
+
+        public required DbSet<BossEntity> Bosses { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
+        }
     }
 }

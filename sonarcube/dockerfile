@@ -1,0 +1,20 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /app
+
+COPY ["backend/DotnetComp/DotnetComp.csproj", "."]
+
+RUN dotnet restore 
+
+COPY ./backend/DotnetComp .
+
+RUN apt-get update
+
+## Install sonarscanner
+RUN dotnet tool install --global dotnet-sonarscanner --version 10.1.0
+
+## Install report generator
+#RUN dotnet tool install --global dotnet-reportgenerator-globaltool --version 4.8.12
+
+## Set the dotnet tools folder in the PATH env variable
+ENV PATH="${PATH}:/root/.dotnet/tools"
+

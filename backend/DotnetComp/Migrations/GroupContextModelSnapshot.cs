@@ -39,7 +39,25 @@ namespace DotnetComp.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("AuthProviders");
+                    b.ToTable("AuthProviders", (string)null);
+                });
+
+            modelBuilder.Entity("DotnetComp.Models.Entities.BossEntity", b =>
+                {
+                    b.Property<int>("BossId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("BossId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Bosses", (string)null);
                 });
 
             modelBuilder.Entity("DotnetComp.Models.Entities.GroupEntity", b =>
@@ -60,7 +78,38 @@ namespace DotnetComp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Groups");
+                    b.ToTable("Groups", (string)null);
+                });
+
+            modelBuilder.Entity("DotnetComp.Models.Entities.PlayerBossStat", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("BossId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Kills")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("PlayerEntityPlayerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Rank")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlayerEntityPlayerId");
+
+                    b.ToTable("PlayerBossStats", (string)null);
                 });
 
             modelBuilder.Entity("DotnetComp.Models.Entities.PlayerEntity", b =>
@@ -82,7 +131,7 @@ namespace DotnetComp.Migrations
 
                     b.HasKey("PlayerId");
 
-                    b.ToTable("Players");
+                    b.ToTable("Players", (string)null);
                 });
 
             modelBuilder.Entity("DotnetComp.Models.Entities.PlayerExperienceEntity", b =>
@@ -107,7 +156,7 @@ namespace DotnetComp.Migrations
 
                     b.HasIndex("PlayerEntityPlayerId");
 
-                    b.ToTable("PlayerExperienceEntity");
+                    b.ToTable("PlayerExperienceEntity", (string)null);
                 });
 
             modelBuilder.Entity("DotnetComp.Models.Entities.UserEntity", b =>
@@ -123,7 +172,7 @@ namespace DotnetComp.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("GroupEntityPlayerEntity", b =>
@@ -138,7 +187,7 @@ namespace DotnetComp.Migrations
 
                     b.HasIndex("PlayersPlayerId");
 
-                    b.ToTable("GroupEntityPlayerEntity");
+                    b.ToTable("GroupEntityPlayerEntity", (string)null);
                 });
 
             modelBuilder.Entity("DotnetComp.Models.Entities.AuthProviderEntity", b =>
@@ -161,6 +210,13 @@ namespace DotnetComp.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DotnetComp.Models.Entities.PlayerBossStat", b =>
+                {
+                    b.HasOne("DotnetComp.Models.Entities.PlayerEntity", null)
+                        .WithMany("PlayerBossStats")
+                        .HasForeignKey("PlayerEntityPlayerId");
                 });
 
             modelBuilder.Entity("DotnetComp.Models.Entities.PlayerExperienceEntity", b =>
@@ -187,6 +243,8 @@ namespace DotnetComp.Migrations
 
             modelBuilder.Entity("DotnetComp.Models.Entities.PlayerEntity", b =>
                 {
+                    b.Navigation("PlayerBossStats");
+
                     b.Navigation("PlayerExperiences");
                 });
 

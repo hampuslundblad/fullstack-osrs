@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DotnetComp.Models.Entities
 {
@@ -17,5 +18,7 @@ namespace DotnetComp.Models.Entities
         public ICollection<GroupEntity> Groups { get; set; } = [];
 
         public ICollection<PlayerExperienceEntity> PlayerExperiences { get; set; } = [];
+
+        public ICollection<PlayerBossStat> PlayerBossStats { get; set; } = [];
     }
 }
