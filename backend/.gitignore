@@ -27,6 +27,7 @@ obj/
 
 #db
 /DotnetComp/test.db
+/DotnetComp/test.backup.db
 
 # settings
 /DotnetComp/appsettings.Development.json

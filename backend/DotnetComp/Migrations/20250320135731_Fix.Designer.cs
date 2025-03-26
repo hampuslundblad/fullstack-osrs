@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DotnetComp.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20250320133943_RenameTest")]
-    partial class RenameTest
+    [Migration("20250320135731_Fix")]
+    partial class Fix
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,8 +67,7 @@ namespace DotnetComp.Migrations
                 {
                     b.Property<int>("GroupId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("GroupId");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("GroupName")
                         .IsRequired()
@@ -120,8 +119,7 @@ namespace DotnetComp.Migrations
                 {
                     b.Property<int>("PlayerId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("PlayerId");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("PlayerName")
                         .IsRequired()

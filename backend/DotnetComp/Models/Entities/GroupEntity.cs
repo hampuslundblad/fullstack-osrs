@@ -1,12 +1,10 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DotnetComp.Models.Entities
 {
     public class GroupEntity
     {
         [Key]
-        [Column("GroupId")]
         public int GroupId { get; set; }
 
         [MinLength(3), MaxLength(32)]

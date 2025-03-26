@@ -6,22 +6,30 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DotnetComp.Migrations
 {
     /// <inheritdoc />
-    public partial class PlayerBossStatsAndBoss : Migration
+    public partial class Fix : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropColumn(
+                name: "ExperienceGainedLast24H",
+                table: "Players");
+
+            migrationBuilder.DropColumn(
+                name: "ExperienceGainedLastWeek",
+                table: "Players");
+
             migrationBuilder.CreateTable(
                 name: "Bosses",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    BossId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Bosses", x => x.Id);
+                    table.PrimaryKey("PK_Bosses", x => x.BossId);
                 });
 
             migrationBuilder.CreateTable(
@@ -67,6 +75,20 @@ namespace DotnetComp.Migrations
 
             migrationBuilder.DropTable(
                 name: "PlayerBossStats");
+
+            migrationBuilder.AddColumn<int>(
+                name: "ExperienceGainedLast24H",
+                table: "Players",
+                type: "INTEGER",
+                nullable: false,
+                defaultValue: 0);
+
+            migrationBuilder.AddColumn<int>(
+                name: "ExperienceGainedLastWeek",
+                table: "Players",
+                type: "INTEGER",
+                nullable: false,
+                defaultValue: 0);
         }
     }
 }

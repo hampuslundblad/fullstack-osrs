@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using DotnetComp.Errors;
+using DotnetComp.Models.Domain;
 using DotnetComp.Models.Dto;
 using DotnetComp.Results;
 using DotnetComp.Services;
@@ -23,7 +24,7 @@ namespace DotnetComp.Controllers.v1
         /// </summary>
         /// <param name="name"> Name of the osrs player</param>
         [HttpGet("{name}")]
-        public async Task<ActionResult<PlayerHiscoreDTO>> Get(string name)
+        public async Task<ActionResult<PlayerHiscore>> Get(string name)
         {
             if (name.Length < 3 || name.Length > 100)
             {
@@ -36,7 +37,7 @@ namespace DotnetComp.Controllers.v1
             return response.Match(
                 onSuccess: () =>
                 {
-                    var result = PlayerHiscoreDTO.FromDomain(response.Value);
+                    var result = response.Value;
                     return Ok(result);
                 },
                 onFailure: error =>

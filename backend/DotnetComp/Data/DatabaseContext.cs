@@ -13,5 +13,10 @@ namespace DotnetComp.Data
         public required DbSet<PlayerBossStat> PlayerBossStats { get; set; }
 
         public required DbSet<BossEntity> Bosses { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
+        }
     }
 }

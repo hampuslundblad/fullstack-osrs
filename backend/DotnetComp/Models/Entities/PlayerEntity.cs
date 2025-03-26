@@ -6,7 +6,6 @@ namespace DotnetComp.Models.Entities
     public class PlayerEntity
     {
         [Key]
-        [Column("PlayerId")]
         public int PlayerId { get; set; }
 
         [MinLength(3), MaxLength(128)]
